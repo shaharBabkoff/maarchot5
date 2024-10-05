@@ -16,7 +16,8 @@ MSTree PrimMST::computeMST(const Graph &graph)
         adj[edge.v2_].push_back(PrimEdge(edge.weight_, edge.v1_, edge.v2_)); // Because the graph is undirected
     }
 
-    MSTree mst; // To store the resulting MST
+    
+    MSTree mst(graph.numVertices_);  // Make sure the number of vertices is correct
     std::vector<PrimEdge> min_e(n);
     min_e[0].w = 0; // Start with vertex 0
     set<PrimEdge> q;
@@ -60,7 +61,7 @@ MSTree KruskalMST::computeMST(const Graph &graph)
 
     UnionFind uf(graph.numVertices_);  // Union-Find initialized with number of vertices
     vector<Edge> edges = graph.edges_; // Get all edges from the graph
-    MSTree mst;                        // To store the resulting MST
+     MSTree mst(graph.numVertices_);        // To store the resulting MST
 
     // Sort edges by weight (cost) in ascending order
     sort(edges.begin(), edges.end(), [](const Edge &a, const Edge &b)
