@@ -23,6 +23,7 @@ public:
         adjList.resize(numVertices_); // Initialize adjList with the number of vertices
     }
     void addEdge(const Edge &edge);
+    void removeEdge(int v1, int v2);
     void printMST();
     void findLongestDistance();
     void findAverageDistance();

@@ -1,7 +1,7 @@
 #include "MSTree.hpp"
 #include <iostream>
 #include <limits>
-
+using namespace std;
 MSTree::MSTree() : totalWeight_(0) {}
 
 void MSTree::addEdge(const Edge &edge) {
@@ -12,22 +12,46 @@ void MSTree::addEdge(const Edge &edge) {
     adjList[edge.v1_].push_back({edge.v2_, edge.weight_});
     adjList[edge.v2_].push_back({edge.v1_, edge.weight_});
 }
+void MSTree::removeEdge(int v1,int v2){
+    // Find and remove the edge in mstEdges_
+    for (auto it = mstEdges_.begin(); it != mstEdges_.end(); ++it) {
+        if ((it->v1_ == v1 && it->v2_ == v2) || (it->v1_ == v2 && it->v2_ == v1)) {
+            totalWeight_ -= it->weight_;  // Subtract the weight from totalWeight_
+            mstEdges_.erase(it);          // Remove the edge from mstEdges_
+            break;
+        }
+    }
+
+    // Remove the edge from the adjacency list for both directions
+    auto removeEdgeFromAdjList = [](vector<vector<pair<int, double>>>& adjList, int v1, int v2) {
+        adjList[v1].erase(remove_if(adjList[v1].begin(), adjList[v1].end(),
+                                         [v2](const pair<int, double>& edge) {
+                                             return edge.first == v2;
+                                         }),
+                          adjList[v1].end());
+    };
+
+    // Remove from both directions since it's undirected
+    removeEdgeFromAdjList(adjList, v1, v2);
+    removeEdgeFromAdjList(adjList, v2, v1);
+}
+
 
 
 void MSTree::printMST()
 {
-    std::cout << "MST Edges:\n";
+    cout << "MST Edges:\n";
     for (const auto &edge : mstEdges_)
     {
-        std::cout << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << std::endl;
+        cout << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << endl;
     }
-    std::cout << "Total MST Weight: " << totalWeight_ << std::endl;
+    cout << "Total MST Weight: " << totalWeight_ << endl;
 }
 
-std::vector<double> MSTree::bfs(int start)
+vector<double> MSTree::bfs(int start)
 {
-    std::vector<double> distances(numVertices_, std::numeric_limits<double>::max());
-    std::queue<int> q;
+    vector<double> distances(numVertices_, numeric_limits<double>::max());
+    queue<int> q;
     distances[start] = 0;
     q.push(start);
 
@@ -56,10 +80,10 @@ std::vector<double> MSTree::bfs(int start)
 // Find the shortest distance between all pairs of vertices
 void MSTree::findShortestDistance()
 {
-    double shortestDistance = std::numeric_limits<double>::max();
+    double shortestDistance = numeric_limits<double>::max();
     for (int i = 0; i < numVertices_; ++i)
     {
-        std::vector<double> distances = bfs(i);
+        vector<double> distances = bfs(i);
         for (int j = 0; j < numVertices_; ++j)
         {
             if (i != j && distances[j] < shortestDistance)
@@ -68,13 +92,13 @@ void MSTree::findShortestDistance()
             }
         }
     }
-    std::cout << "Shortest Distance: " << shortestDistance << std::endl;
+    cout << "Shortest Distance: " << shortestDistance << endl;
 }
 
 // Helper function to perform DFS and return the farthest node and its distance
-std::pair<int, double> MSTree::dfs(int node, int parent, std::vector<bool>& visited) {
+pair<int, double> MSTree::dfs(int node, int parent, vector<bool>& visited) {
     visited[node] = true;
-    std::pair<int, double> farthest = {node, 0};  // {farthest node, distance}
+    pair<int, double> farthest = {node, 0};  // {farthest node, distance}
 
     for (const auto& neighbor : adjList[node]) {
         int nextNode = neighbor.first;
@@ -96,17 +120,17 @@ std::pair<int, double> MSTree::dfs(int node, int parent, std::vector<bool>& visi
 void MSTree::findLongestDistance() {
     double ans;
     // Step 1: Perform DFS from any node (say node 0) to find the farthest node
-    std::vector<bool> visited(numVertices_, false);
+    vector<bool> visited(numVertices_, false);
     auto farthestFromStart = dfs(0, -1, visited);
 
     // Step 2: Reset the visited vector and perform DFS from the farthest node found
-    std::fill(visited.begin(), visited.end(), false);
+    fill(visited.begin(), visited.end(), false);
     auto farthest = dfs(farthestFromStart.first, -1, visited);
 
     // The second DFS gives the longest distance
     ans = farthest.second;
 
-    std::cout << "Longest Distance: " << ans << std::endl;
+    cout << "Longest Distance: " << ans << endl;
 }
 
 // Find the average distance between all pairs of vertices
@@ -118,11 +142,11 @@ void MSTree::findAverageDistance()
 
     for (int i = 0; i < numVertices_; ++i)
     {
-        std::vector<double> distances = bfs(i);
+        vector<double> distances = bfs(i);
 
         for (int j = i + 1; j < numVertices_; ++j)
         { // Avoid double-counting
-            if (distances[j] < std::numeric_limits<double>::max())
+            if (distances[j] < numeric_limits<double>::max())
             { // Only consider valid paths
                 totalDistance += distances[j];
                 ++count;
@@ -139,5 +163,5 @@ void MSTree::findAverageDistance()
         ans = 0; // Handle the case where no valid distances were found
     }
 
-    std::cout << "Average Distance: " << ans << std::endl;
+    cout << "Average Distance: " << ans << endl;
 }

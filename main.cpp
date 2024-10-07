@@ -80,4 +80,34 @@ int main()
   kruskalMST2.findAverageDistance();
   kruskalMST2.findShortestDistance();
 
+//---------------------------------removeEdgeTest-----------------------------------------------------
+Graph graph3(5);
+    graph3.addEdge(0, 1, 10);
+    graph3.addEdge(0, 2, 5);
+    graph3.addEdge(1, 2, 7);
+    graph3.addEdge(1, 3, 8);
+    graph3.addEdge(2, 3, 6);
+    graph3.addEdge(3, 4, 9);
+
+    // Display the original graph
+    cout << "Original Graph Edges:\n";
+    graph3.printGraph();
+
+    // Step 2: Use MSTFactory to compute MST using Prim's algorithm
+    MSTFactory factory3;
+    unique_ptr<MSTStrategy> primStrategy3 = factory3.getMSTStrategy(MSTFactory::PRIM);
+    MSTree mst3 = primStrategy3->computeMST(graph3);
+
+    // Print the MST before removing an edge
+    cout << "\nMST Edges Before Removal:\n";
+    mst3.printMST();
+
+    // Step 3: Remove an edge and test
+    cout << "\nRemoving edge (2, 3) from MST...\n";
+    mst3.removeEdge(2, 3);
+
+    // Print the MST after removing the edge to see if it has been removed correctly
+    cout << "\nMST Edges After Removal of (2, 3):\n";
+    mst3.printMST();
+
 }
