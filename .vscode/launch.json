@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/mst_project", // Path to your compiled executable
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb", // Use "lldb" for macOS
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build all", // References the "build" task from tasks.json
+            "miDebuggerPath": "/usr/bin/gdb", // Adjust if gdb is installed in a different location
+            "logging": {
+                "engineLogging": true,
+                "trace": true,
+                "traceResponse": true
+            }
+        }
+    ]
+}

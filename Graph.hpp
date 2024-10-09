@@ -16,7 +16,8 @@ public:
 
     Graph(int vertices);
     void addEdge(int v1, int v2, double weight);
-    void printGraph();
+    void removeEdge(int v1, int v2);
+    void printGraph(int fd);
 };
 
 #endif // GRAPH_HPP

@@ -1,30 +1,37 @@
 # Compiler
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17
+CXXFLAGS = -Wall -Wextra -std=c++17 -g -O0
+
+# Directories
+BIN_DIR = bin
 
 # Target executable
-TARGET = mst_project
+TARGET = $(BIN_DIR)/mst_project
 
 # Source files
-SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp
+SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp pollserver.cpp listner.cpp tcp_dup.cpp tcp_client_thread_pool.cpp pipeline.cpp
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+# Object files (placed in bin/)
+OBJS = $(SRCS:%.cpp=$(BIN_DIR)/%.o)
 
 # Header files
 HEADERS = Graph.hpp MSTree.hpp MSTStrategy.hpp union_find.hpp
 
+# Ensure the bin directory exists
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
 # Default target
-all: $(TARGET)
+all: $(BIN_DIR) $(TARGET)
 
 # Link object files to create the executable
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
 
-# Compile source files into object files
-%.o: %.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) -c $<
+# Compile source files into object files (in bin/)
+$(BIN_DIR)/%.o: %.cpp $(HEADERS)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean up the build files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(BIN_DIR)/*.o $(TARGET)

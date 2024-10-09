@@ -23,10 +23,10 @@ public:
         adjList.resize(numVertices_); // Initialize adjList with the number of vertices
     }
     void addEdge(const Edge &edge);
-    void printMST();
-    void findLongestDistance();
-    void findAverageDistance();
-    void findShortestDistance();
+    void printMST(int fd);
+    double findLongestDistance();
+    double findAverageDistance();
+    double findShortestDistance();
 };
 
 #endif // MSTREE_HPP
