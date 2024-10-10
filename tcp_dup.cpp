@@ -8,6 +8,7 @@
 #include "MSTStrategy.hpp"
 #include "MSTree.hpp"
 #include "pipeline.hpp"
+#include "LeaderFollowerThreadPool.hpp"
 // #include "kosaraju.h"
 #define COMMANDS_USAGE "enter one of the following commands:\n"                              \
                        "            Newgraph <verttices>,<edges>\n"                          \
@@ -36,6 +37,7 @@
 
 #define NEWLINE "\n"
 
+#define LINE_SEPERATOR "*****************************************************\n"
 void printCommands(int fd)
 {
     write(fd, COMMANDS_USAGE, sizeof(COMMANDS_USAGE));
@@ -108,10 +110,25 @@ void execute(int fd, char *token, Graph *graph)
     }
     mst = strategy->computeMST(*graph);
     mst.printMST(fd);
+    write(fd, LINE_SEPERATOR, sizeof(LINE_SEPERATOR));
+    std::ostringstream oss;
+    oss << "Running pipeline for " << token << std::endl;
+    std::string output = oss.str();
+    write(fd, output.c_str(), output.size());
+
     Pipeline &pipeline = Pipeline::getPipeline();
-    auto task = std::make_shared<Task>(mst, fd);
+    auto task = std::make_shared<PipelineTask>(mst, fd);
     pipeline.execute(task);
     task->waitForCompletion();
+    write(fd, LINE_SEPERATOR, sizeof(LINE_SEPERATOR));
+    oss.str("");
+    oss.clear();
+    oss << "Running Leader/Follower thread pool for " << token << std::endl;
+    output = oss.str();
+    write(fd, output.c_str(), output.size());
+    executeLeaderFollowerThreadPool(mst, fd);
+    write(fd, LINE_SEPERATOR, sizeof(LINE_SEPERATOR));
+
 }
 
 void executeCommand(int fd, char *input, void **context)

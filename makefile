@@ -9,7 +9,7 @@ BIN_DIR = bin
 TARGET = $(BIN_DIR)/mst_project
 
 # Source files
-SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp pollserver.cpp listner.cpp tcp_dup.cpp tcp_client_thread_pool.cpp pipeline.cpp
+SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp pollserver.cpp listner.cpp tcp_dup.cpp tcp_client_thread_pool.cpp pipeline.cpp LeaderFollowerThreadPool.cpp
 
 # Object files (placed in bin/)
 OBJS = $(SRCS:%.cpp=$(BIN_DIR)/%.o)

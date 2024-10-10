@@ -1,30 +1,30 @@
 #include <unistd.h>
 #include "pipeline.hpp"
 
-// Task class implementation
-Task::Task(MSTree data, int fd) : data_(data), done_(false), fd_(fd)
+// PipelineTask class implementation
+PipelineTask::PipelineTask(MSTree data, int fd) : data_(data), done_(false), fd_(fd)
 {
     remaining_stages_ = 0;
 }
 
-MSTree &Task::getData()
+MSTree &PipelineTask::getData()
 {
     return data_;
 }
 
-void Task::setData(MSTree data)
+void PipelineTask::setData(MSTree data)
 {
     data_ = data;
 }
 
-void Task::waitForCompletion()
+void PipelineTask::waitForCompletion()
 {
     std::unique_lock<std::mutex> lock(mutex_);
     cond_.wait(lock, [this]()
                { return done_; });
 }
 
-void Task::stageCompleted()
+void PipelineTask::stageCompleted()
 {
     std::unique_lock<std::mutex> lock(mutex_);
     remaining_stages_--; // Decrement the counter
@@ -36,14 +36,14 @@ void Task::stageCompleted()
 }
 
 // TaskQueue class implementation
-void TaskQueue::enqueue(std::shared_ptr<Task> task)
+void TaskQueue::enqueue(std::shared_ptr<PipelineTask> task)
 {
     std::unique_lock<std::mutex> lock(mutex_);
     queue_.push(task);
     cond_.notify_one(); // Notify the waiting thread
 }
 
-std::shared_ptr<Task> TaskQueue::dequeue()
+std::shared_ptr<PipelineTask> TaskQueue::dequeue()
 {
     std::unique_lock<std::mutex> lock(mutex_);
     cond_.wait(lock, [this]()
@@ -76,7 +76,7 @@ void ActiveObject::stop()
     }
 }
 
-void ActiveObject::enqueueTask(std::shared_ptr<Task> task)
+void ActiveObject::enqueueTask(std::shared_ptr<PipelineTask> task)
 {
     queue_.enqueue(task);
 }
@@ -93,7 +93,7 @@ void ActiveObject::run()
     }
 }
 
-void LongestDistance::processTask(std::shared_ptr<Task> task)
+void PLLongestDistance::processTask(std::shared_ptr<PipelineTask> task)
 {
     std::ostringstream oss;
     oss << "LongestDistance: " << task->getData().findLongestDistance() << std::endl;
@@ -101,7 +101,7 @@ void LongestDistance::processTask(std::shared_ptr<Task> task)
     write(task->getFD(), output.c_str(), output.size());
 }
 
-void AverageDistance::processTask(std::shared_ptr<Task> task)
+void PLAverageDistance::processTask(std::shared_ptr<PipelineTask> task)
 {
     std::ostringstream oss;
     oss << "AverageDistance: " << task->getData().findAverageDistance() << std::endl;
@@ -109,7 +109,7 @@ void AverageDistance::processTask(std::shared_ptr<Task> task)
     write(task->getFD(), output.c_str(), output.size());
 }
 
-void ShortestDistance::processTask(std::shared_ptr<Task> task)
+void PLShortestDistance::processTask(std::shared_ptr<PipelineTask> task)
 {
     std::ostringstream oss;
     oss << "ShortestDistance: " << task->getData().findShortestDistance() << std::endl;
@@ -125,7 +125,7 @@ void Pipeline::addStage(ActiveObject *stage)
     stages_.push_back(stage);
 }
 
-void Pipeline::execute(std::shared_ptr<Task> task)
+void Pipeline::execute(std::shared_ptr<PipelineTask> task)
 {
     task->setRemainingStages(getStageCount());
     for (auto &stage : stages_)
@@ -163,9 +163,9 @@ Pipeline &Pipeline::getPipeline()
     if (!initialized)
     {
         // Initialize the pipeline with stages
-        instance.addStage(new LongestDistance());
-        instance.addStage(new AverageDistance());
-        instance.addStage(new ShortestDistance());
+        instance.addStage(new PLLongestDistance());
+        instance.addStage(new PLAverageDistance());
+        instance.addStage(new PLShortestDistance());
         instance.start(); // Start the pipeline stages
         initialized = true;
     }

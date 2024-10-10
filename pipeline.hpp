@@ -11,11 +11,11 @@
 #include <atomic>
 #include <sstream>
 #include "MSTree.hpp"
-// Task class representing the data to be processed
-class Task
+// PipelineTask class representing the data to be processed
+class PipelineTask
 {
 public:
-    explicit Task(MSTree data, int fd);
+    explicit PipelineTask(MSTree data, int fd);
 
     MSTree &getData();
     void setData(MSTree data);
@@ -40,7 +40,7 @@ private:
     int remaining_stages_; // Counter tracking how many stages are left
     std::mutex mutex_;
     std::condition_variable cond_;
-    bool done_; // Task completion flag
+    bool done_; // PipelineTask completion flag
     int fd_;
 };
 
@@ -49,13 +49,13 @@ class TaskQueue
 {
 public:
     // Enqueue a task
-    void enqueue(std::shared_ptr<Task> task);
+    void enqueue(std::shared_ptr<PipelineTask> task);
 
     // Dequeue a task (waits if the queue is empty)
-    std::shared_ptr<Task> dequeue();
+    std::shared_ptr<PipelineTask> dequeue();
 
 private:
-    std::queue<std::shared_ptr<Task>> queue_;
+    std::queue<std::shared_ptr<PipelineTask>> queue_;
     std::mutex mutex_;
     std::condition_variable cond_;
 };
@@ -74,11 +74,11 @@ public:
     void stop();
 
     // Enqueue a task to this stage
-    void enqueueTask(std::shared_ptr<Task> task);
+    void enqueueTask(std::shared_ptr<PipelineTask> task);
 
 protected:
     // Process function to be implemented by subclasses
-    virtual void processTask(std::shared_ptr<Task> task) = 0;
+    virtual void processTask(std::shared_ptr<PipelineTask> task) = 0;
 
 private:
     TaskQueue queue_;
@@ -89,25 +89,22 @@ private:
     void run();
 };
 
-// Stage 1: A dummy stage to simulate processing
-class LongestDistance : public ActiveObject
+class PLLongestDistance : public ActiveObject
 {
 protected:
-    void processTask(std::shared_ptr<Task> task) override;
+    void processTask(std::shared_ptr<PipelineTask> task) override;
 };
 
-// Stage 2: Multiply the task's data by 2
-class AverageDistance : public ActiveObject
+class PLAverageDistance : public ActiveObject
 {
 protected:
-    void processTask(std::shared_ptr<Task> task) override;
+    void processTask(std::shared_ptr<PipelineTask> task) override;
 };
 
-// Stage 3: Print the result
-class ShortestDistance : public ActiveObject
+class PLShortestDistance : public ActiveObject
 {
 protected:
-    void processTask(std::shared_ptr<Task> task) override;
+    void processTask(std::shared_ptr<PipelineTask> task) override;
 };
 
 // Pipeline class holding the stages
@@ -118,7 +115,7 @@ public:
     void addStage(ActiveObject *stage);
 
     // Execute a task through the pipeline (independently in all stages)
-    void execute(std::shared_ptr<Task> task);
+    void execute(std::shared_ptr<PipelineTask> task);
 
     // Start all stages
     void start();
