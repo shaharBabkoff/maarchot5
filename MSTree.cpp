@@ -4,6 +4,8 @@
 #include <sstream>
 #include <unistd.h>
 
+using namespace std;
+
 MSTree::MSTree() : totalWeight_(0) {}
 
 void MSTree::addEdge(const Edge &edge)
@@ -14,29 +16,6 @@ void MSTree::addEdge(const Edge &edge)
     // Ensure the adjacency list is correctly updated for both directions (undirected graph)
     adjList[edge.v1_].push_back({edge.v2_, edge.weight_});
     adjList[edge.v2_].push_back({edge.v1_, edge.weight_});
-}
-void MSTree::removeEdge(int v1,int v2){
-    // Find and remove the edge in mstEdges_
-    for (auto it = mstEdges_.begin(); it != mstEdges_.end(); ++it) {
-        if ((it->v1_ == v1 && it->v2_ == v2) || (it->v1_ == v2 && it->v2_ == v1)) {
-            totalWeight_ -= it->weight_;  // Subtract the weight from totalWeight_
-            mstEdges_.erase(it);          // Remove the edge from mstEdges_
-            break;
-        }
-    }
-
-    // Remove the edge from the adjacency list for both directions
-    auto removeEdgeFromAdjList = [](vector<vector<pair<int, double>>>& adjList, int v1, int v2) {
-        adjList[v1].erase(remove_if(adjList[v1].begin(), adjList[v1].end(),
-                                         [v2](const pair<int, double>& edge) {
-                                             return edge.first == v2;
-                                         }),
-                          adjList[v1].end());
-    };
-
-    // Remove from both directions since it's undirected
-    removeEdgeFromAdjList(adjList, v1, v2);
-    removeEdgeFromAdjList(adjList, v2, v1);
 }
 
 

@@ -13,16 +13,16 @@
                        "            Newgraph <verttices>,<edges>\n"                          \
                        "                User should enter <edges> pairs of directed edges\n" \
                        "            Newedge <from>,<to>,<weight>\n"                          \
-                       "            Removeedge <from>,<to>\n"                              \
-                       "            Print\n"                                              \
-                       "            Prim\n"                                              \
-                       "            Kruskal\n\n"                                              \
+                       "            Removeedge <from>,<to>\n"                                \
+                       "            Print\n"                                                 \
+                       "            Prim\n"                                                  \
+                       "            Kruskal\n\n"                                             \
                        "enter command:\n"
 
 #define MISSING_VERT_EDGE "Must specify verttices and edges\n"
 
-#define PRINT_EDGES_MESSAGE(edges) \
-    "Enter the " #edges " directed edges as triplets of vertices <from>,<to>,<weight>:\n"
+#define PRINT_EDGES_MESSAGE \
+    "Enter the  directed edges as triplets of vertices <from>,<to>,<weight>:\n"
 
 #define MISSING_GRAPH "Graph does not exist, please create a graph\n"
 
@@ -30,10 +30,11 @@
 
 #define INVALID_EDGE "Must specify both endpoints of the edge to remove\n"
 
-#define ILLEGAL_COMMAND(command) \
-    "unrecognized command " #command "\n"
+#define ILLEGAL_COMMAND "unrecognized command "
 
 #define ENTER_COMMAND "Enter command:\n"
+
+#define NEWLINE "\n"
 
 void printCommands(int fd)
 {
@@ -57,7 +58,7 @@ Graph *getNewGraph(int fd, int vertices, int edges)
     Graph *graph = new Graph(vertices);
     if (edges > 0)
     {
-        write(fd, PRINT_EDGES_MESSAGE(edges), sizeof(PRINT_EDGES_MESSAGE(edges)));
+        write(fd, PRINT_EDGES_MESSAGE, sizeof(PRINT_EDGES_MESSAGE));
         for (int i = 0; i < edges; i++)
         {
             char input[1024];
@@ -74,6 +75,13 @@ Graph *getNewGraph(int fd, int vertices, int edges)
             src = strtok_r(input, ",\n", &saveptr);
             dest = strtok_r(NULL, ",\n", &saveptr);
             weight = strtok_r(NULL, ",\n", &saveptr);
+            if (src == NULL || dest == NULL || weight == NULL)
+            {
+                write(fd, INVALID_NEW_EDGE, sizeof(INVALID_NEW_EDGE));
+                delete graph;
+                graph = NULL;
+                break;
+            }
             graph->addEdge(atoi(src), atoi(dest), atof(weight));
         }
     }
@@ -203,7 +211,9 @@ void executeCommand(int fd, char *input, void **context)
         }
         else
         {
-            write(fd, ILLEGAL_COMMAND(token), sizeof(ILLEGAL_COMMAND(token)));
+            write(fd, ILLEGAL_COMMAND, sizeof(ILLEGAL_COMMAND));
+            write(fd, token, strlen(token));
+            write(fd, NEWLINE, sizeof(NEWLINE));
         }
     }
     write(fd, ENTER_COMMAND, sizeof(ENTER_COMMAND));
