@@ -9,13 +9,13 @@ BIN_DIR = bin
 TARGET = $(BIN_DIR)/mst_project
 
 # Source files
-SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp pollserver.cpp listner.cpp tcp_dup.cpp tcp_client_thread_pool.cpp pipeline.cpp LeaderFollowerThreadPool.cpp
+SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp pollserver.cpp listner.cpp execute_commands.cpp tcp_client_thread_pool.cpp pipeline.cpp LeaderFollowerThreadPool.cpp
 
 # Object files (placed in bin/)
 OBJS = $(SRCS:%.cpp=$(BIN_DIR)/%.o)
 
 # Header files
-HEADERS = Graph.hpp MSTree.hpp MSTStrategy.hpp union_find.hpp LeaderFollowerThreadPool.hpp listner.hpp pipeline.hpp tcp_dup.hpp tcp_client_thread_pool.hpp
+HEADERS = Graph.hpp MSTree.hpp MSTStrategy.hpp union_find.hpp LeaderFollowerThreadPool.hpp listner.hpp pipeline.hpp execute_commands.hpp tcp_client_thread_pool.hpp
 
 # Ensure the bin directory exists
 $(BIN_DIR):
