@@ -15,7 +15,7 @@ SRCS = Graph.cpp MSTree.cpp MSTStrategy.cpp union_find.cpp main.cpp pollserver.c
 OBJS = $(SRCS:%.cpp=$(BIN_DIR)/%.o)
 
 # Header files
-HEADERS = Graph.hpp MSTree.hpp MSTStrategy.hpp union_find.hpp
+HEADERS = Graph.hpp MSTree.hpp MSTStrategy.hpp union_find.hpp LeaderFollowerThreadPool.hpp listner.hpp pipeline.hpp tcp_dup.hpp tcp_client_thread_pool.hpp
 
 # Ensure the bin directory exists
 $(BIN_DIR):
