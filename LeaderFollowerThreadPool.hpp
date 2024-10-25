@@ -55,14 +55,14 @@ public:
     LeaderFollowerThreadPool(const LeaderFollowerThreadPool &) = delete;
     LeaderFollowerThreadPool &operator=(const LeaderFollowerThreadPool &) = delete;
 
-    std::shared_ptr<TaskGroup> addTaskGroup(const std::vector<std::shared_ptr<LFTPTask>> &tasks);
+    void addTaskGroup(const std::vector<std::shared_ptr<LFTPTask>> &tasks);
 
 private:
     // Private constructor
     LeaderFollowerThreadPool(size_t numThreads);
     ~LeaderFollowerThreadPool();
 
-    void workerThread();
+    void workerThread(int threadId);
 
     std::vector<std::thread> threads;
     std::queue<std::shared_ptr<LFTPTask>> taskQueue;
@@ -70,6 +70,7 @@ private:
     std::mutex mtx;
     std::condition_variable condVar;
     bool stopPool = false;
+    int currentLeader = -1;
 };
 
 void executeLeaderFollowerThreadPool(MSTree data, int fd);

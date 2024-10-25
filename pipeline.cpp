@@ -54,7 +54,7 @@ std::shared_ptr<PipelineTask> TaskQueue::dequeue()
 }
 
 // ActiveObject class implementation
-ActiveObject::ActiveObject() : done_(false) {}
+ActiveObject::ActiveObject(ActiveObject *next_stage) : done_(false), next_stage_(next_stage) {}
 
 ActiveObject::~ActiveObject()
 {
@@ -90,7 +90,19 @@ void ActiveObject::run()
             break;              // Exit if a null task is received
         processTask(task);      // Process the task in this stage
         task->stageCompleted(); // Notify the task that this stage is done
+
+        if (next_stage_)
+        {
+            next_stage_->enqueueTask(task); // Pass task to the next stage
+        }
     }
+}
+void PLTotalWeight::processTask(std::shared_ptr<PipelineTask> task)
+{
+    std::ostringstream oss;
+    oss << "TotalWeight: " << task->getData().getTotalWeight() << std::endl;
+    std::string output = oss.str();
+    write(task->getFD(), output.c_str(), output.size());
 }
 
 void PLLongestDistance::processTask(std::shared_ptr<PipelineTask> task)
@@ -122,15 +134,19 @@ Pipeline::Pipeline() = default;
 
 void Pipeline::addStage(ActiveObject *stage)
 {
+    if (!stages_.empty())
+    {
+        stages_.back()->setNextStage(stage); // Link previous stage to this one
+    }
     stages_.push_back(stage);
 }
 
 void Pipeline::execute(std::shared_ptr<PipelineTask> task)
 {
-    task->setRemainingStages(getStageCount());
-    for (auto &stage : stages_)
+    if (!stages_.empty())
     {
-        stage->enqueueTask(task); // Send the task to each stage independently
+        task->setRemainingStages(getStageCount());
+        stages_[0]->enqueueTask(task); // Start the task in the first stage
     }
 }
 
@@ -163,6 +179,7 @@ Pipeline &Pipeline::getPipeline()
     if (!initialized)
     {
         // Initialize the pipeline with stages
+        instance.addStage(new PLTotalWeight());
         instance.addStage(new PLLongestDistance());
         instance.addStage(new PLAverageDistance());
         instance.addStage(new PLShortestDistance());

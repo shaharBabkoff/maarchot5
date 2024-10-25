@@ -27,6 +27,7 @@ public:
     double findLongestDistance();
     double findAverageDistance();
     double findShortestDistance();
+    double getTotalWeight();
 };
 
 #endif // MSTREE_HPP

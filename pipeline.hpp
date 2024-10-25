@@ -64,7 +64,7 @@ private:
 class ActiveObject
 {
 public:
-    explicit ActiveObject();
+    explicit ActiveObject(ActiveObject* next_stage = nullptr);
     virtual ~ActiveObject();
 
     // Start the active object thread
@@ -76,6 +76,10 @@ public:
     // Enqueue a task to this stage
     void enqueueTask(std::shared_ptr<PipelineTask> task);
 
+    void setNextStage(ActiveObject* next_stage) {
+        next_stage_ = next_stage;
+    }
+
 protected:
     // Process function to be implemented by subclasses
     virtual void processTask(std::shared_ptr<PipelineTask> task) = 0;
@@ -84,25 +88,38 @@ private:
     TaskQueue queue_;
     std::thread thread_;
     bool done_;
+    ActiveObject* next_stage_;  // Pointer to the next stage in the pipeline
 
     // Run method executed by the thread
     void run();
 };
-
+class PLTotalWeight : public ActiveObject
+{
+public:
+    using ActiveObject::ActiveObject;
+protected:
+    void processTask(std::shared_ptr<PipelineTask> task) override;
+};
 class PLLongestDistance : public ActiveObject
 {
+public:
+    using ActiveObject::ActiveObject;
 protected:
     void processTask(std::shared_ptr<PipelineTask> task) override;
 };
 
 class PLAverageDistance : public ActiveObject
 {
+public:
+    using ActiveObject::ActiveObject;
 protected:
     void processTask(std::shared_ptr<PipelineTask> task) override;
 };
 
 class PLShortestDistance : public ActiveObject
 {
+public:
+    using ActiveObject::ActiveObject;
 protected:
     void processTask(std::shared_ptr<PipelineTask> task) override;
 };

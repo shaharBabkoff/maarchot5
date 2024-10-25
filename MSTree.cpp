@@ -28,7 +28,7 @@ void MSTree::printMST(int fd)
         {
             std::cout << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << std::endl;
         }
-        std::cout << "Total MST Weight: " << totalWeight_ << std::endl;
+      //  std::cout << "Total MST Weight: " << totalWeight_ << std::endl;
     }
     else
     {
@@ -38,7 +38,7 @@ void MSTree::printMST(int fd)
         {
             oss << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << std::endl;
         }
-        oss << "Total MST Weight: " << totalWeight_ << std::endl;
+        //oss << "Total MST Weight: " << totalWeight_ << std::endl;
         std::string output = oss.str();
         write(fd, output.c_str(), output.size());
     }
@@ -72,7 +72,9 @@ vector<double> MSTree::bfs(int start)
 
     return distances;
 }
-
+double MSTree::getTotalWeight(){
+    return totalWeight_;
+}
 // Find the shortest distance between all pairs of vertices
 double MSTree::findShortestDistance()
 {

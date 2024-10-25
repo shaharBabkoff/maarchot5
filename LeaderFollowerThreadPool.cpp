@@ -46,7 +46,7 @@ LeaderFollowerThreadPool::LeaderFollowerThreadPool(size_t numThreads)
     // Create worker threads
     for (size_t i = 0; i < numThreads; ++i)
     {
-        threads.emplace_back(&LeaderFollowerThreadPool::workerThread, this);
+        threads.emplace_back(&LeaderFollowerThreadPool::workerThread, this, i);
     }
 }
 
@@ -66,10 +66,8 @@ LeaderFollowerThreadPool::~LeaderFollowerThreadPool()
     }
 }
 
-std::shared_ptr<TaskGroup> LeaderFollowerThreadPool::addTaskGroup(const std::vector<std::shared_ptr<LFTPTask>> &tasks)
+void LeaderFollowerThreadPool::addTaskGroup(const std::vector<std::shared_ptr<LFTPTask>> &tasks)
 {
-    // Create a task group with a counter set to the size of the tasks vector
-    std::shared_ptr<TaskGroup> taskGroup = std::make_shared<TaskGroup>(tasks.size());
 
     std::unique_lock<std::mutex> lock(mtx);
     for (const auto &task : tasks)
@@ -77,39 +75,67 @@ std::shared_ptr<TaskGroup> LeaderFollowerThreadPool::addTaskGroup(const std::vec
         taskQueue.push(task);
     }
     condVar.notify_all(); // Notify threads that new tasks are available
-    return taskGroup;
 }
 
-void LeaderFollowerThreadPool::workerThread()
-{
-    while (true)
-    {
+void LeaderFollowerThreadPool::workerThread(int threadId) {
+    while (true) {
         std::shared_ptr<LFTPTask> task;
 
         {
             std::unique_lock<std::mutex> lock(mtx);
 
-            // Wait until there are tasks available or the pool is stopped
-            condVar.wait(lock, [this]
-                         { return !taskQueue.empty() || stopPool; });
+            // Only the first thread to enter when currentLeader == -1 will set itself as the leader
+            while (currentLeader != threadId && !stopPool) {
+                if (currentLeader == -1) {
+                    // No leader exists, so this thread becomes the leader
+                    currentLeader = threadId;
+                } else {
+                    // Wait for current leader to finish or stop signal
+                    condVar.wait(lock);
+                }
+            }
 
-            if (stopPool || taskQueue.empty())
-            {
+            if (stopPool) {
                 break;
             }
 
-            // Pick the next task
-            task = taskQueue.front();
-            taskQueue.pop();
+            // Leader waits for a task to be available in the queue
+            condVar.wait(lock, [this] { return !taskQueue.empty() || stopPool; });
+
+            if (stopPool) {
+                break;
+            }
+
+            // As the leader, pick the next task if available
+            if (!taskQueue.empty()) {
+                task = taskQueue.front();
+                taskQueue.pop();
+            }
+
+            // Pass leadership if there are other threads waiting
+            currentLeader = -1;
+            condVar.notify_all();  // Notify waiting threads to check for leadership
         }
 
         // Process the task outside the critical section
-        if (task)
-        {
-            task->process();
+        if (task) {
+            task->process();  // Process with current thread's ID
         }
     }
 }
+
+class LFTPTotalWeight : public LFTPTask
+{
+public:
+    LFTPTotalWeight(MSTree data, int fd, std::shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
+    void execute()
+    {
+        std::ostringstream oss;
+        oss << "TotalWeight: " << data_.getTotalWeight() << std::endl;
+        std::string output = oss.str();
+        write(fd_, output.c_str(), output.size());
+    }
+};
 
 class LFTPLongestDistance : public LFTPTask
 {
@@ -156,8 +182,9 @@ void executeLeaderFollowerThreadPool(MSTree data, int fd)
     LeaderFollowerThreadPool &pool = LeaderFollowerThreadPool::getInstance(4);
     std::vector<std::shared_ptr<LFTPTask>> tasks;
 
-    auto taskGroup = std::make_shared<TaskGroup>(3); // 5 tasks in the group
+    auto taskGroup = std::make_shared<TaskGroup>(4);
 
+    tasks.push_back(std::make_shared<LFTPTotalWeight>(data, fd, taskGroup));
     tasks.push_back(std::make_shared<LFTPLongestDistance>(data, fd, taskGroup));
     tasks.push_back(std::make_shared<LFTPAverageDistance>(data, fd, taskGroup));
     tasks.push_back(std::make_shared<LFTPShortestDistance>(data, fd, taskGroup));
@@ -166,5 +193,4 @@ void executeLeaderFollowerThreadPool(MSTree data, int fd)
 
     // Wait for all tasks in the group to complete
     taskGroup->waitForTaskGroup();
-
 }
