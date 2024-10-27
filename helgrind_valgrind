@@ -1,0 +1,447 @@
+shaharbabkoff@Ubunto:~/maarchot/maarchot5-main$ valgrind --tool=helgrind bin/mst_project
+==6122== Helgrind, a thread error detector
+==6122== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==6122== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==6122== Command: bin/mst_project
+==6122== 
+add_to_pfds:  6
+pollserver: new connection from 127.0.0.1 on socket 6
+ready to read from 6, going to post to thread pool!!!
+==6122== ---Thread-Announcement------------------------------------------
+==6122== 
+==6122== Thread #1 is the program's root thread
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Thread #1: pthread_cond_{signal,broadcast}: dubious: associated lock is not held by any thread
+==6122==    at 0x48513D6: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x120CA5: TcpClientThreadPool::enqueue(std::shared_ptr<Context>) (tcp_client_thread_pool.cpp:39)
+==6122==    by 0x11C2E5: poll_clients(char const*) (pollserver.cpp:214)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122== 
+going to remove 6
+==6122== ---Thread-Announcement------------------------------------------
+==6122== 
+==6122== Thread #2 was created
+==6122==    at 0x4BE39F3: clone (clone.S:76)
+==6122==    by 0x4BE48EE: __clone_internal (clone-internal.c:83)
+==6122==    by 0x4B526D8: create_thread (pthread_create.c:295)
+==6122==    by 0x4B531FF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==6122==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x494E328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==    by 0x121521: std::thread::thread<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}, , void>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (std_thread.h:143)
+==6122==    by 0x121472: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (new_allocator.h:162)
+==6122==    by 0x1211D9: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::allocator<std::thread>&, std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (alloc_traits.h:516)
+==6122==    by 0x1212AF: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:449)
+==6122==    by 0x121143: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:121)
+==6122==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 1 at 0x4DE5DD9 by thread #2
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x120E63: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:59)
+==6122==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==6122==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==6122==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==6122==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==6122==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==6122==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122== 
+==6122== This conflicts with a previous write of size 1 by thread #1
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BD3C: del_from_pfds(pollfd*, int, int*) (pollserver.cpp:91)
+==6122==    by 0x11C312: poll_clients(char const*) (pollserver.cpp:215)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Address 0x4de5dd9 is 9 bytes inside a block of size 1,024 alloc'd
+==6122==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B3CBA3: _IO_file_doallocate (filedoalloc.c:101)
+==6122==    by 0x4B4BCDF: _IO_doallocbuf (genops.c:347)
+==6122==    by 0x4B4AF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==6122==    by 0x4B496D4: _IO_new_file_xsputn (fileops.c:1243)
+==6122==    by 0x4B496D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BB7D: add_to_pfds(pollfd**, int, int*, int*) (pollserver.cpp:44)
+==6122==    by 0x11C0C7: poll_clients(char const*) (pollserver.cpp:184)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Block was alloc'd by thread #1
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 1 at 0x4DE5DDA by thread #2
+==6122== Locks held: none
+==6122==    at 0x48597B4: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B33CA8: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B33CA8: __vfprintf_internal (vfprintf-internal.c:1516)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x120E63: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:59)
+==6122==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==6122==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==6122==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==6122==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==6122==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==6122==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122== 
+==6122== This conflicts with a previous write of size 1 by thread #1
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BD3C: del_from_pfds(pollfd*, int, int*) (pollserver.cpp:91)
+==6122==    by 0x11C312: poll_clients(char const*) (pollserver.cpp:215)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Address 0x4de5dda is 10 bytes inside a block of size 1,024 alloc'd
+==6122==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B3CBA3: _IO_file_doallocate (filedoalloc.c:101)
+==6122==    by 0x4B4BCDF: _IO_doallocbuf (genops.c:347)
+==6122==    by 0x4B4AF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==6122==    by 0x4B496D4: _IO_new_file_xsputn (fileops.c:1243)
+==6122==    by 0x4B496D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BB7D: add_to_pfds(pollfd**, int, int*, int*) (pollserver.cpp:44)
+==6122==    by 0x11C0C7: poll_clients(char const*) (pollserver.cpp:184)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Block was alloc'd by thread #1
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 1 at 0x4DE5DDB by thread #2
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B33FC9: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B33FC9: __vfprintf_internal (vfprintf-internal.c:1593)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x120E63: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:59)
+==6122==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==6122==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==6122==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==6122==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==6122==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==6122==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122== 
+==6122== This conflicts with a previous write of size 1 by thread #1
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BD3C: del_from_pfds(pollfd*, int, int*) (pollserver.cpp:91)
+==6122==    by 0x11C312: poll_clients(char const*) (pollserver.cpp:215)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Address 0x4de5ddb is 11 bytes inside a block of size 1,024 alloc'd
+==6122==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B3CBA3: _IO_file_doallocate (filedoalloc.c:101)
+==6122==    by 0x4B4BCDF: _IO_doallocbuf (genops.c:347)
+==6122==    by 0x4B4AF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==6122==    by 0x4B496D4: _IO_new_file_xsputn (fileops.c:1243)
+==6122==    by 0x4B496D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BB7D: add_to_pfds(pollfd**, int, int*, int*) (pollserver.cpp:44)
+==6122==    by 0x11C0C7: poll_clients(char const*) (pollserver.cpp:184)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Block was alloc'd by thread #1
+==6122== 
+in worker 6
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 1 at 0x4DE5DE1 by thread #2
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3EF1B: puts (ioputs.c:40)
+==6122==    by 0x120E7E: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:61)
+==6122==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==6122==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==6122==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==6122==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==6122==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==6122==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122== 
+==6122== This conflicts with a previous write of size 1 by thread #1
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B33FC9: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B33FC9: __vfprintf_internal (vfprintf-internal.c:1593)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BD3C: del_from_pfds(pollfd*, int, int*) (pollserver.cpp:91)
+==6122==    by 0x11C312: poll_clients(char const*) (pollserver.cpp:215)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Address 0x4de5de1 is 17 bytes inside a block of size 1,024 alloc'd
+==6122==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B3CBA3: _IO_file_doallocate (filedoalloc.c:101)
+==6122==    by 0x4B4BCDF: _IO_doallocbuf (genops.c:347)
+==6122==    by 0x4B4AF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==6122==    by 0x4B496D4: _IO_new_file_xsputn (fileops.c:1243)
+==6122==    by 0x4B496D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BB7D: add_to_pfds(pollfd**, int, int*, int*) (pollserver.cpp:44)
+==6122==    by 0x11C0C7: poll_clients(char const*) (pollserver.cpp:184)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Block was alloc'd by thread #1
+==6122== 
+going to call recv!!!
+returned from recv!!!
+buf: Newgraph 2,1
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 1 at 0x4DE5DE5 by thread #1
+==6122== Locks held: none
+==6122==    at 0x4859796: mempcpy (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B49664: _IO_new_file_xsputn (fileops.c:1235)
+==6122==    by 0x4B49664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3EF1B: puts (ioputs.c:40)
+==6122==    by 0x11C15C: poll_clients(char const*) (pollserver.cpp:197)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122== 
+==6122== This conflicts with a previous write of size 1 by thread #2
+==6122== Locks held: none
+==6122==    at 0x4B4AE08: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:780)
+==6122==    by 0x4B3EFA9: puts (ioputs.c:41)
+==6122==    by 0x120E7E: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:61)
+==6122==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==6122==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==6122==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==6122==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==6122==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==6122==  Address 0x4de5de5 is 21 bytes inside a block of size 1,024 alloc'd
+==6122==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x4B3CBA3: _IO_file_doallocate (filedoalloc.c:101)
+==6122==    by 0x4B4BCDF: _IO_doallocbuf (genops.c:347)
+==6122==    by 0x4B4AF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==6122==    by 0x4B496D4: _IO_new_file_xsputn (fileops.c:1243)
+==6122==    by 0x4B496D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==6122==    by 0x4B3314C: outstring_func (vfprintf-internal.c:239)
+==6122==    by 0x4B3314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==6122==    by 0x4B1E79E: printf (printf.c:33)
+==6122==    by 0x11BB7D: add_to_pfds(pollfd**, int, int*, int*) (pollserver.cpp:44)
+==6122==    by 0x11C0C7: poll_clients(char const*) (pollserver.cpp:184)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+==6122==  Block was alloc'd by thread #1
+==6122== 
+completed client operation.going to read from pipe
+add_to_pfds:  6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Prim
+Prim....
+==6122== ---Thread-Announcement------------------------------------------
+==6122== 
+==6122== Thread #3 was created
+==6122==    at 0x4BE39F3: clone (clone.S:76)
+==6122==    by 0x4BE48EE: __clone_internal (clone-internal.c:83)
+==6122==    by 0x4B526D8: create_thread (pthread_create.c:295)
+==6122==    by 0x4B531FF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==6122==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x494E328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==    by 0x121521: std::thread::thread<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}, , void>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (std_thread.h:143)
+==6122==    by 0x121472: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (new_allocator.h:162)
+==6122==    by 0x1211D9: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::allocator<std::thread>&, std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (alloc_traits.h:516)
+==6122==    by 0x1212AF: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:449)
+==6122==    by 0x121143: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:121)
+==6122==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==6122== 
+==6122== ---Thread-Announcement------------------------------------------
+==6122== 
+==6122== Thread #11 was created
+==6122==    at 0x4BE39F3: clone (clone.S:76)
+==6122==    by 0x4BE48EE: __clone_internal (clone-internal.c:83)
+==6122==    by 0x4B526D8: create_thread (pthread_create.c:295)
+==6122==    by 0x4B531FF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==6122==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x494E328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==    by 0x12EFE1: std::thread::thread<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&, void>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (std_thread.h:143)
+==6122==    by 0x12E3CC: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (new_allocator.h:162)
+==6122==    by 0x12D3AE: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::allocator<std::thread>&, std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (alloc_traits.h:516)
+==6122==    by 0x12D4B7: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:449)
+==6122==    by 0x12C89B: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:121)
+==6122==    by 0x12AF63: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:49)
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 8 at 0x4DE8EA0 by thread #3
+==6122== Locks held: none
+==6122==    at 0x1344A1: LFTPLongestDistance::~LFTPLongestDistance() (LeaderFollowerThreadPool.cpp:140)
+==6122==    by 0x1344D3: void __gnu_cxx::new_allocator<LFTPLongestDistance>::destroy<LFTPLongestDistance>(LFTPLongestDistance*) (new_allocator.h:168)
+==6122==    by 0x1342B0: void std::allocator_traits<std::allocator<LFTPLongestDistance> >::destroy<LFTPLongestDistance>(std::allocator<LFTPLongestDistance>&, LFTPLongestDistance*) (alloc_traits.h:535)
+==6122==    by 0x133BC0: std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() (shared_ptr_base.h:528)
+==6122==    by 0x11C612: std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release() (shared_ptr_base.h:168)
+==6122==    by 0x11C49A: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::~__shared_count() (shared_ptr_base.h:705)
+==6122==    by 0x12B97D: std::__shared_ptr<LFTPTask, (__gnu_cxx::_Lock_policy)2>::~__shared_ptr() (shared_ptr_base.h:1154)
+==6122==    by 0x12B9B7: std::shared_ptr<LFTPTask>::~shared_ptr() (shared_ptr.h:122)
+==6122==    by 0x12FEE6: void std::_Destroy<std::shared_ptr<LFTPTask> >(std::shared_ptr<LFTPTask>*) (stl_construct.h:151)
+==6122==    by 0x12F27F: void std::_Destroy_aux<false>::__destroy<std::shared_ptr<LFTPTask>*>(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*) (stl_construct.h:163)
+==6122==    by 0x12E66B: void std::_Destroy<std::shared_ptr<LFTPTask>*>(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*) (stl_construct.h:196)
+==6122==    by 0x12D8CA: void std::_Destroy<std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask> >(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*, std::allocator<std::shared_ptr<LFTPTask> >&) (alloc_traits.h:848)
+==6122== 
+==6122== This conflicts with a previous read of size 8 by thread #11
+==6122== Locks held: none
+==6122==    at 0x12ADC0: LFTPTask::process() (LeaderFollowerThreadPool.cpp:33)
+==6122==    by 0x12B3EA: LeaderFollowerThreadPool::workerThread(int) (LeaderFollowerThreadPool.cpp:122)
+==6122==    by 0x1347F2: void std::__invoke_impl<void, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>(std::__invoke_memfun_deref, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&&) (invoke.h:74)
+==6122==    by 0x13470B: std::__invoke_result<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>::type std::__invoke<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&&) (invoke.h:96)
+==6122==    by 0x13462A: void std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> >::_M_invoke<0ul, 1ul, 2ul>(std::_Index_tuple<0ul, 1ul, 2ul>) (std_thread.h:259)
+==6122==    by 0x1343A7: std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> >::operator()() (std_thread.h:266)
+==6122==    by 0x1341D7: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==  Address 0x4de8ea0 is 16 bytes inside a block of size 112 alloc'd
+==6122==    at 0x484B093: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x132E57: __gnu_cxx::new_allocator<std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==6122==    by 0x1322A8: std::allocator_traits<std::allocator<std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2> > >::allocate(std::allocator<std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2> >&, unsigned long) (alloc_traits.h:464)
+==6122==    by 0x131439: std::__allocated_ptr<std::allocator<std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2> > > std::__allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2> > >(std::allocator<std::_Sp_counted_ptr_inplace<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, (__gnu_cxx::_Lock_policy)2> >&) (allocated_ptr.h:98)
+==6122==    by 0x13038B: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(LFTPLongestDistance*&, std::_Sp_alloc_shared_tag<std::allocator<LFTPLongestDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr_base.h:648)
+==6122==    by 0x12F70B: std::__shared_ptr<LFTPLongestDistance, (__gnu_cxx::_Lock_policy)2>::__shared_ptr<std::allocator<LFTPLongestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::_Sp_alloc_shared_tag<std::allocator<LFTPLongestDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr_base.h:1342)
+==6122==    by 0x12EAE8: std::shared_ptr<LFTPLongestDistance>::shared_ptr<std::allocator<LFTPLongestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::_Sp_alloc_shared_tag<std::allocator<LFTPLongestDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:409)
+==6122==    by 0x12DBDE: std::shared_ptr<LFTPLongestDistance> std::allocate_shared<LFTPLongestDistance, std::allocator<LFTPLongestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::allocator<LFTPLongestDistance> const&, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:863)
+==6122==    by 0x12CDD2: std::shared_ptr<LFTPLongestDistance> std::make_shared<LFTPLongestDistance, MSTree&, int&, std::shared_ptr<TaskGroup>&>(MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:879)
+==6122==    by 0x12B518: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:185)
+==6122==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==6122==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==6122==  Block was alloc'd by thread #3
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 8 at 0x4DE92D0 by thread #3
+==6122== Locks held: none
+==6122==    at 0x13443D: LFTPAverageDistance::~LFTPAverageDistance() (LeaderFollowerThreadPool.cpp:153)
+==6122==    by 0x13446F: void __gnu_cxx::new_allocator<LFTPAverageDistance>::destroy<LFTPAverageDistance>(LFTPAverageDistance*) (new_allocator.h:168)
+==6122==    by 0x134268: void std::allocator_traits<std::allocator<LFTPAverageDistance> >::destroy<LFTPAverageDistance>(std::allocator<LFTPAverageDistance>&, LFTPAverageDistance*) (alloc_traits.h:535)
+==6122==    by 0x133A18: std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() (shared_ptr_base.h:528)
+==6122==    by 0x11C612: std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release() (shared_ptr_base.h:168)
+==6122==    by 0x11C49A: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::~__shared_count() (shared_ptr_base.h:705)
+==6122==    by 0x12B97D: std::__shared_ptr<LFTPTask, (__gnu_cxx::_Lock_policy)2>::~__shared_ptr() (shared_ptr_base.h:1154)
+==6122==    by 0x12B9B7: std::shared_ptr<LFTPTask>::~shared_ptr() (shared_ptr.h:122)
+==6122==    by 0x12FEE6: void std::_Destroy<std::shared_ptr<LFTPTask> >(std::shared_ptr<LFTPTask>*) (stl_construct.h:151)
+==6122==    by 0x12F27F: void std::_Destroy_aux<false>::__destroy<std::shared_ptr<LFTPTask>*>(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*) (stl_construct.h:163)
+==6122==    by 0x12E66B: void std::_Destroy<std::shared_ptr<LFTPTask>*>(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*) (stl_construct.h:196)
+==6122==    by 0x12D8CA: void std::_Destroy<std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask> >(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*, std::allocator<std::shared_ptr<LFTPTask> >&) (alloc_traits.h:848)
+==6122== 
+==6122== This conflicts with a previous read of size 8 by thread #11
+==6122== Locks held: none
+==6122==    at 0x12ADC0: LFTPTask::process() (LeaderFollowerThreadPool.cpp:33)
+==6122==    by 0x12B3EA: LeaderFollowerThreadPool::workerThread(int) (LeaderFollowerThreadPool.cpp:122)
+==6122==    by 0x1347F2: void std::__invoke_impl<void, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>(std::__invoke_memfun_deref, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&&) (invoke.h:74)
+==6122==    by 0x13470B: std::__invoke_result<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>::type std::__invoke<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&&) (invoke.h:96)
+==6122==    by 0x13462A: void std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> >::_M_invoke<0ul, 1ul, 2ul>(std::_Index_tuple<0ul, 1ul, 2ul>) (std_thread.h:259)
+==6122==    by 0x1343A7: std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> >::operator()() (std_thread.h:266)
+==6122==    by 0x1341D7: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==  Address 0x4de92d0 is 16 bytes inside a block of size 112 alloc'd
+==6122==    at 0x484B093: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x1330BF: __gnu_cxx::new_allocator<std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==6122==    by 0x132440: std::allocator_traits<std::allocator<std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2> > >::allocate(std::allocator<std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2> >&, unsigned long) (alloc_traits.h:464)
+==6122==    by 0x1316F1: std::__allocated_ptr<std::allocator<std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2> > > std::__allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2> > >(std::allocator<std::_Sp_counted_ptr_inplace<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, (__gnu_cxx::_Lock_policy)2> >&) (allocated_ptr.h:98)
+==6122==    by 0x130571: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(LFTPAverageDistance*&, std::_Sp_alloc_shared_tag<std::allocator<LFTPAverageDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr_base.h:648)
+==6122==    by 0x12F7AB: std::__shared_ptr<LFTPAverageDistance, (__gnu_cxx::_Lock_policy)2>::__shared_ptr<std::allocator<LFTPAverageDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::_Sp_alloc_shared_tag<std::allocator<LFTPAverageDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr_base.h:1342)
+==6122==    by 0x12EB80: std::shared_ptr<LFTPAverageDistance>::shared_ptr<std::allocator<LFTPAverageDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::_Sp_alloc_shared_tag<std::allocator<LFTPAverageDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:409)
+==6122==    by 0x12DCFE: std::shared_ptr<LFTPAverageDistance> std::allocate_shared<LFTPAverageDistance, std::allocator<LFTPAverageDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::allocator<LFTPAverageDistance> const&, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:863)
+==6122==    by 0x12CEDC: std::shared_ptr<LFTPAverageDistance> std::make_shared<LFTPAverageDistance, MSTree&, int&, std::shared_ptr<TaskGroup>&>(MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:879)
+==6122==    by 0x12B56E: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:186)
+==6122==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==6122==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==6122==  Block was alloc'd by thread #3
+==6122== 
+==6122== ----------------------------------------------------------------
+==6122== 
+==6122== Possible data race during write of size 8 at 0x4DE8F50 by thread #3
+==6122== Locks held: none
+==6122==    at 0x1343D9: LFTPShortestDistance::~LFTPShortestDistance() (LeaderFollowerThreadPool.cpp:166)
+==6122==    by 0x13440B: void __gnu_cxx::new_allocator<LFTPShortestDistance>::destroy<LFTPShortestDistance>(LFTPShortestDistance*) (new_allocator.h:168)
+==6122==    by 0x134220: void std::allocator_traits<std::allocator<LFTPShortestDistance> >::destroy<LFTPShortestDistance>(std::allocator<LFTPShortestDistance>&, LFTPShortestDistance*) (alloc_traits.h:535)
+==6122==    by 0x133870: std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() (shared_ptr_base.h:528)
+==6122==    by 0x11C612: std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release() (shared_ptr_base.h:168)
+==6122==    by 0x11C49A: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::~__shared_count() (shared_ptr_base.h:705)
+==6122==    by 0x12B97D: std::__shared_ptr<LFTPTask, (__gnu_cxx::_Lock_policy)2>::~__shared_ptr() (shared_ptr_base.h:1154)
+==6122==    by 0x12B9B7: std::shared_ptr<LFTPTask>::~shared_ptr() (shared_ptr.h:122)
+==6122==    by 0x12FEE6: void std::_Destroy<std::shared_ptr<LFTPTask> >(std::shared_ptr<LFTPTask>*) (stl_construct.h:151)
+==6122==    by 0x12F27F: void std::_Destroy_aux<false>::__destroy<std::shared_ptr<LFTPTask>*>(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*) (stl_construct.h:163)
+==6122==    by 0x12E66B: void std::_Destroy<std::shared_ptr<LFTPTask>*>(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*) (stl_construct.h:196)
+==6122==    by 0x12D8CA: void std::_Destroy<std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask> >(std::shared_ptr<LFTPTask>*, std::shared_ptr<LFTPTask>*, std::allocator<std::shared_ptr<LFTPTask> >&) (alloc_traits.h:848)
+==6122== 
+==6122== This conflicts with a previous read of size 8 by thread #11
+==6122== Locks held: none
+==6122==    at 0x12ADC0: LFTPTask::process() (LeaderFollowerThreadPool.cpp:33)
+==6122==    by 0x12B3EA: LeaderFollowerThreadPool::workerThread(int) (LeaderFollowerThreadPool.cpp:122)
+==6122==    by 0x1347F2: void std::__invoke_impl<void, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>(std::__invoke_memfun_deref, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&&) (invoke.h:74)
+==6122==    by 0x13470B: std::__invoke_result<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>::type std::__invoke<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&&) (invoke.h:96)
+==6122==    by 0x13462A: void std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> >::_M_invoke<0ul, 1ul, 2ul>(std::_Index_tuple<0ul, 1ul, 2ul>) (std_thread.h:259)
+==6122==    by 0x1343A7: std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> >::operator()() (std_thread.h:266)
+==6122==    by 0x1341D7: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long> > >::_M_run() (std_thread.h:211)
+==6122==    by 0x494E252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==6122==  Address 0x4de8f50 is 16 bytes inside a block of size 112 alloc'd
+==6122==    at 0x484B093: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==6122==    by 0x133327: __gnu_cxx::new_allocator<std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==6122==    by 0x1325D8: std::allocator_traits<std::allocator<std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2> > >::allocate(std::allocator<std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2> >&, unsigned long) (alloc_traits.h:464)
+==6122==    by 0x1319A9: std::__allocated_ptr<std::allocator<std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2> > > std::__allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2> > >(std::allocator<std::_Sp_counted_ptr_inplace<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, (__gnu_cxx::_Lock_policy)2> >&) (allocated_ptr.h:98)
+==6122==    by 0x130757: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(LFTPShortestDistance*&, std::_Sp_alloc_shared_tag<std::allocator<LFTPShortestDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr_base.h:648)
+==6122==    by 0x12F84B: std::__shared_ptr<LFTPShortestDistance, (__gnu_cxx::_Lock_policy)2>::__shared_ptr<std::allocator<LFTPShortestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::_Sp_alloc_shared_tag<std::allocator<LFTPShortestDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr_base.h:1342)
+==6122==    by 0x12EC18: std::shared_ptr<LFTPShortestDistance>::shared_ptr<std::allocator<LFTPShortestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::_Sp_alloc_shared_tag<std::allocator<LFTPShortestDistance> >, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:409)
+==6122==    by 0x12DE1E: std::shared_ptr<LFTPShortestDistance> std::allocate_shared<LFTPShortestDistance, std::allocator<LFTPShortestDistance>, MSTree&, int&, std::shared_ptr<TaskGroup>&>(std::allocator<LFTPShortestDistance> const&, MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:863)
+==6122==    by 0x12CFE6: std::shared_ptr<LFTPShortestDistance> std::make_shared<LFTPShortestDistance, MSTree&, int&, std::shared_ptr<TaskGroup>&>(MSTree&, int&, std::shared_ptr<TaskGroup>&) (shared_ptr.h:879)
+==6122==    by 0x12B5C4: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:187)
+==6122==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==6122==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==6122==  Block was alloc'd by thread #3
+==6122== 
+completed client operation.going to read from pipe
+add_to_pfds:  6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Kruskal
+Kruskal....
+completed client operation.going to read from pipe
+add_to_pfds:  6
+^V^V^V^V^V^V^V^V==6122== 
+==6122== Process terminating with default action of signal 2 (SIGINT)
+==6122==    at 0x4BD6BCF: poll (poll.c:29)
+==6122==    by 0x11BFD8: poll_clients(char const*) (pollserver.cpp:156)
+==6122==    by 0x11B9FC: main (main.cpp:13)
+^C==6122== 
+==6122== Use --history-level=approx or =none to gain increased speed, at
+==6122== the cost of reduced accuracy of conflicting-access information
+==6122== For lists of detected and suppressed errors, rerun with: -s
+==6122== ERROR SUMMARY: 145 errors from 9 contexts (suppressed: 441 from 76)
+
+shaharbabkoff@Ubunto:~/maarchot/maarchot5-main$ 

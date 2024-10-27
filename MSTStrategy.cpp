@@ -7,7 +7,7 @@ MSTree PrimMST::computeMST(const Graph &graph)
 {
 
     int n = graph.numVertices_;                // Number of vertices
-    std::vector<std::vector<PrimEdge>> adj(n); // Adjacency list
+    vector<vector<PrimEdge>> adj(n); // Adjacency list
 
     // Convert the edges from the Graph object to an adjacency list
     for (const auto &edge : graph.edges_)
@@ -18,12 +18,12 @@ MSTree PrimMST::computeMST(const Graph &graph)
 
     
     MSTree mst(graph.numVertices_);  // Make sure the number of vertices is correct
-    std::vector<PrimEdge> min_e(n);
+    vector<PrimEdge> min_e(n);
     min_e[0].w = 0; // Start with vertex 0
     set<PrimEdge> q;
     q.insert({0, 0, -1}); // Starting from node 0
 
-    std::vector<bool> selected(n, false);
+    vector<bool> selected(n, false);
 
     for (int i = 0; i < n; ++i)
     {
@@ -90,9 +90,9 @@ unique_ptr<MSTStrategy> MSTFactory::getMSTStrategy(MSTType type)
     switch (type)
     {
     case PRIM:
-        return std::make_unique<PrimMST>();
+        return make_unique<PrimMST>();
     case KRUSKAL:
-        return std::make_unique<KruskalMST>();
+        return make_unique<KruskalMST>();
     default:
         return nullptr;
     }

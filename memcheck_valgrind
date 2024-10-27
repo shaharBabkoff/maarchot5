@@ -1,0 +1,532 @@
+shaharbabkoff@Ubunto:~/maarchot/maarchot5-main$ valgrind --leak-check=full --show-leak-kinds=all bi
+n/mst_project
+==5695== Memcheck, a memory error detector
+==5695== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==5695== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==5695== Command: bin/mst_project
+==5695== 
+add_to_pfds:  6
+pollserver: new connection from 127.0.0.1 on socket 6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Newgraph 2,1
+completed client operation.going to read from pipe
+add_to_pfds:  6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Prim
+Prim....
+completed client operation.going to read from pipe
+add_to_pfds:  6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Kruskal
+Kruskal....
+completed client operation.going to read from pipe
+add_to_pfds:  6
+^C==5695== 
+==5695== Process terminating with default action of signal 2 (SIGINT)
+==5695==    at 0x4BCFBCF: poll (poll.c:29)
+==5695==    by 0x11BFD8: poll_clients(char const*) (pollserver.cpp:156)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== HEAP SUMMARY:
+==5695==     in use at exit: 83,632 bytes in 50 blocks
+==5695==   total heap usage: 310 allocs, 260 frees, 112,039 bytes allocated
+==5695== 
+==5695== 16 bytes in 1 blocks are still reachable in loss record 1 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1214EA: std::thread::thread<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}, , void>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (std_thread.h:143)
+==5695==    by 0x121472: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (new_allocator.h:162)
+==5695==    by 0x1211D9: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::allocator<std::thread>&, std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (alloc_traits.h:516)
+==5695==    by 0x1210FD: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:115)
+==5695==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 16 bytes in 1 blocks are still reachable in loss record 2 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x10E0A7: __gnu_cxx::new_allocator<Edge>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x10DEE7: std::allocator_traits<std::allocator<Edge> >::allocate(std::allocator<Edge>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x10DC9F: std::_Vector_base<Edge, std::allocator<Edge> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==5695==    by 0x10D69E: void std::vector<Edge, std::allocator<Edge> >::_M_realloc_insert<int&, int&, double&>(__gnu_cxx::__normal_iterator<Edge*, std::vector<Edge, std::allocator<Edge> > >, int&, int&, double&) (vector.tcc:440)
+==5695==    by 0x10D297: Edge& std::vector<Edge, std::allocator<Edge> >::emplace_back<int&, int&, double&>(int&, int&, double&) (vector.tcc:121)
+==5695==    by 0x10CCCC: Graph::addEdge(int, int, double) (Graph.cpp:12)
+==5695==    by 0x11D7A2: getNewGraph(int, int, int) (execute_commands.cpp:88)
+==5695==    by 0x11DF19: executeCommand(int, char*, void**) (execute_commands.cpp:155)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695== 
+==5695== 32 bytes in 1 blocks are still reachable in loss record 3 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1238E9: __gnu_cxx::new_allocator<std::thread>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x123350: std::allocator_traits<std::allocator<std::thread> >::allocate(std::allocator<std::thread>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x122CA9: std::_Vector_base<std::thread, std::allocator<std::thread> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==5695==    by 0x121272: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:440)
+==5695==    by 0x121143: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:121)
+==5695==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 32 bytes in 1 blocks are still reachable in loss record 4 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x11D5CD: getNewGraph(int, int, int) (execute_commands.cpp:61)
+==5695==    by 0x11DF19: executeCommand(int, char*, void**) (execute_commands.cpp:155)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==5695==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==5695==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==5695==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==5695==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==5695==    by 0x4947252: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695== 
+==5695== 32 bytes in 1 blocks are still reachable in loss record 5 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1294BF: __gnu_cxx::new_allocator<ActiveObject*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x128C05: std::allocator_traits<std::allocator<ActiveObject*> >::allocate(std::allocator<ActiveObject*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x128371: std::_Vector_base<ActiveObject*, std::allocator<ActiveObject*> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==5695==    by 0x1275D4: void std::vector<ActiveObject*, std::allocator<ActiveObject*> >::_M_realloc_insert<ActiveObject* const&>(__gnu_cxx::__normal_iterator<ActiveObject**, std::vector<ActiveObject*, std::allocator<ActiveObject*> > >, ActiveObject* const&) (vector.tcc:440)
+==5695==    by 0x126857: std::vector<ActiveObject*, std::allocator<ActiveObject*> >::push_back(ActiveObject* const&) (stl_vector.h:1198)
+==5695==    by 0x1253EF: Pipeline::addStage(ActiveObject*) (pipeline.cpp:141)
+==5695==    by 0x12577B: Pipeline::getPipeline() (pipeline.cpp:184)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695== 
+==5695== 32 bytes in 1 blocks are still reachable in loss record 6 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1238E9: __gnu_cxx::new_allocator<std::thread>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x123350: std::allocator_traits<std::allocator<std::thread> >::allocate(std::allocator<std::thread>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x122CA9: std::_Vector_base<std::thread, std::allocator<std::thread> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==5695==    by 0x12D458: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:440)
+==5695==    by 0x12C89B: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:121)
+==5695==    by 0x12AF63: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:49)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695== 
+==5695== 40 bytes in 1 blocks are still reachable in loss record 7 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12EFA4: std::thread::thread<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&, void>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (std_thread.h:143)
+==5695==    by 0x12E3CC: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (new_allocator.h:162)
+==5695==    by 0x12D3AE: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::allocator<std::thread>&, std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (alloc_traits.h:516)
+==5695==    by 0x12C834: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:115)
+==5695==    by 0x12AF63: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:49)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695== 
+==5695== 48 bytes in 3 blocks are still reachable in loss record 8 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1214EA: std::thread::thread<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}, , void>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (std_thread.h:143)
+==5695==    by 0x121472: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (new_allocator.h:162)
+==5695==    by 0x1211D9: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::allocator<std::thread>&, std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (alloc_traits.h:516)
+==5695==    by 0x1212AF: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:449)
+==5695==    by 0x121143: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:121)
+==5695==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 56 bytes in 1 blocks are still reachable in loss record 9 of 36
+==5695==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x11BF1A: poll_clients(char const*) (pollserver.cpp:142)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 64 bytes in 1 blocks are still reachable in loss record 10 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x123D1B: __gnu_cxx::new_allocator<std::shared_ptr<Context>*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x12362B: std::allocator_traits<std::allocator<std::shared_ptr<Context>*> >::allocate(std::allocator<std::shared_ptr<Context>*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x1230A5: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_M_allocate_map(unsigned long) (stl_deque.h:576)
+==5695==    by 0x1227D9: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_M_initialize_map(unsigned long) (stl_deque.h:625)
+==5695==    by 0x122233: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x121D3F: std::deque<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::deque() (stl_deque.h:834)
+==5695==    by 0x121DB2: std::queue<std::shared_ptr<Context>, std::deque<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > > >::queue<std::deque<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >, void>() (stl_queue.h:167)
+==5695==    by 0x120A61: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:9)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 64 bytes in 1 blocks are still reachable in loss record 11 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12986B: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask>*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x1292D9: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask>*> >::allocate(std::allocator<std::shared_ptr<PipelineTask>*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x128973: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_map(unsigned long) (stl_deque.h:576)
+==5695==    by 0x127D59: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:625)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125BA4: PLTotalWeight::PLTotalWeight() (pipeline.hpp:97)
+==5695==    by 0x1256E8: Pipeline::getPipeline() (pipeline.cpp:182)
+==5695== 
+==5695== 64 bytes in 1 blocks are still reachable in loss record 12 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12986B: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask>*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x1292D9: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask>*> >::allocate(std::allocator<std::shared_ptr<PipelineTask>*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x128973: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_map(unsigned long) (stl_deque.h:576)
+==5695==    by 0x127D59: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:625)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125BD6: PLLongestDistance::PLLongestDistance() (pipeline.hpp:105)
+==5695==    by 0x125728: Pipeline::getPipeline() (pipeline.cpp:183)
+==5695== 
+==5695== 64 bytes in 1 blocks are still reachable in loss record 13 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12986B: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask>*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x1292D9: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask>*> >::allocate(std::allocator<std::shared_ptr<PipelineTask>*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x128973: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_map(unsigned long) (stl_deque.h:576)
+==5695==    by 0x127D59: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:625)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125C08: PLAverageDistance::PLAverageDistance() (pipeline.hpp:114)
+==5695==    by 0x125768: Pipeline::getPipeline() (pipeline.cpp:184)
+==5695== 
+==5695== 64 bytes in 1 blocks are still reachable in loss record 14 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12986B: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask>*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x1292D9: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask>*> >::allocate(std::allocator<std::shared_ptr<PipelineTask>*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x128973: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_map(unsigned long) (stl_deque.h:576)
+==5695==    by 0x127D59: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:625)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125C3A: PLShortestDistance::PLShortestDistance() (pipeline.hpp:123)
+==5695==    by 0x1257A8: Pipeline::getPipeline() (pipeline.cpp:185)
+==5695== 
+==5695== 64 bytes in 1 blocks are still reachable in loss record 15 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x130B9B: __gnu_cxx::new_allocator<std::shared_ptr<LFTPTask>*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x12FA31: std::allocator_traits<std::allocator<std::shared_ptr<LFTPTask>*> >::allocate(std::allocator<std::shared_ptr<LFTPTask>*>&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x12ED25: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_M_allocate_map(unsigned long) (stl_deque.h:576)
+==5695==    by 0x12DFE1: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:625)
+==5695==    by 0x12D19D: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x12C6AD: std::deque<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12C720: std::queue<std::shared_ptr<LFTPTask>, std::deque<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > > >::queue<std::deque<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x12AEEB: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:44)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==5695== 
+==5695== 80 bytes in 1 blocks are still reachable in loss record 16 of 36
+==5695==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x11BF35: poll_clients(char const*) (pollserver.cpp:143)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 120 bytes in 3 blocks are still reachable in loss record 17 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12EFA4: std::thread::thread<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&, void>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (std_thread.h:143)
+==5695==    by 0x12E3CC: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (new_allocator.h:162)
+==5695==    by 0x12D3AE: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::allocator<std::thread>&, std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (alloc_traits.h:516)
+==5695==    by 0x12D4B7: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:449)
+==5695==    by 0x12C89B: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:121)
+==5695==    by 0x12AF63: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:49)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695== 
+==5695== 128 bytes in 4 blocks are still reachable in loss record 18 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x12651B: std::thread::thread<void (ActiveObject::*)(), ActiveObject*, void>(void (ActiveObject::*&&)(), ActiveObject*&&) (std_thread.h:143)
+==5695==    by 0x124A80: ActiveObject::start() (pipeline.cpp:66)
+==5695==    by 0x125539: Pipeline::start() (pipeline.cpp:157)
+==5695==    by 0x1257CA: Pipeline::getPipeline() (pipeline.cpp:186)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==5695==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==5695== 
+==5695== 200 bytes in 1 blocks are still reachable in loss record 19 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1256C5: Pipeline::getPipeline() (pipeline.cpp:182)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==5695==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==5695==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==5695==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==5695==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==5695== 
+==5695== 200 bytes in 1 blocks are still reachable in loss record 20 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x125705: Pipeline::getPipeline() (pipeline.cpp:183)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==5695==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==5695==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==5695==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==5695==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==5695== 
+==5695== 200 bytes in 1 blocks are still reachable in loss record 21 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x125745: Pipeline::getPipeline() (pipeline.cpp:184)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==5695==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==5695==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==5695==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==5695==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==5695== 
+==5695== 200 bytes in 1 blocks are still reachable in loss record 22 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x125785: Pipeline::getPipeline() (pipeline.cpp:185)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695==    by 0x120A1E: TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}::operator()() const (tcp_client_thread_pool.cpp:14)
+==5695==    by 0x12186B: void std::__invoke_impl<void, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::__invoke_other, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:61)
+==5695==    by 0x12182E: std::__invoke_result<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>::type std::__invoke<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (invoke.h:96)
+==5695==    by 0x1217DB: void std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::_M_invoke<0ul>(std::_Index_tuple<0ul>) (std_thread.h:259)
+==5695==    by 0x1217AF: std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> >::operator()() (std_thread.h:266)
+==5695==    by 0x121793: std::thread::_State_impl<std::thread::_Invoker<std::tuple<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}> > >::_M_run() (std_thread.h:211)
+==5695== 
+==5695== 288 bytes in 1 blocks are possibly lost in loss record 23 of 36
+==5695==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==5695==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==5695==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==5695==    by 0x4B4C7B4: allocate_stack (allocatestack.c:430)
+==5695==    by 0x4B4C7B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==5695==    by 0x4947328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695==    by 0x121521: std::thread::thread<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}, , void>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (std_thread.h:143)
+==5695==    by 0x121472: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (new_allocator.h:162)
+==5695==    by 0x1211D9: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::allocator<std::thread>&, std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (alloc_traits.h:516)
+==5695==    by 0x1210FD: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:115)
+==5695==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 288 bytes in 1 blocks are possibly lost in loss record 24 of 36
+==5695==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==5695==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==5695==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==5695==    by 0x4B4C7B4: allocate_stack (allocatestack.c:430)
+==5695==    by 0x4B4C7B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==5695==    by 0x4947328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695==    by 0x12EFE1: std::thread::thread<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&, void>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (std_thread.h:143)
+==5695==    by 0x12E3CC: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (new_allocator.h:162)
+==5695==    by 0x12D3AE: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::allocator<std::thread>&, std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (alloc_traits.h:516)
+==5695==    by 0x12C834: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:115)
+==5695==    by 0x12AF63: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:49)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695==    by 0x11DC50: execute(int, char*, Graph*) (execute_commands.cpp:128)
+==5695== 
+==5695== 512 bytes in 1 blocks are still reachable in loss record 25 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x124033: __gnu_cxx::new_allocator<std::shared_ptr<Context> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x123C9E: std::allocator_traits<std::allocator<std::shared_ptr<Context> > >::allocate(std::allocator<std::shared_ptr<Context> >&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x12355B: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_M_allocate_node() (stl_deque.h:562)
+==5695==    by 0x123122: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_M_create_nodes(std::shared_ptr<Context>**, std::shared_ptr<Context>**) (stl_deque.h:663)
+==5695==    by 0x12282F: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_M_initialize_map(unsigned long) (stl_deque.h:637)
+==5695==    by 0x122233: std::_Deque_base<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x121D3F: std::deque<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >::deque() (stl_deque.h:834)
+==5695==    by 0x121DB2: std::queue<std::shared_ptr<Context>, std::deque<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > > >::queue<std::deque<std::shared_ptr<Context>, std::allocator<std::shared_ptr<Context> > >, void>() (stl_queue.h:167)
+==5695==    by 0x120A61: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:9)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 512 bytes in 1 blocks are still reachable in loss record 26 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1297B9: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x129216: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask> > >::allocate(std::allocator<std::shared_ptr<PipelineTask> >&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x1287FD: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_node() (stl_deque.h:562)
+==5695==    by 0x1289F0: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_create_nodes(std::shared_ptr<PipelineTask>**, std::shared_ptr<PipelineTask>**) (stl_deque.h:663)
+==5695==    by 0x127DAF: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:637)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125BA4: PLTotalWeight::PLTotalWeight() (pipeline.hpp:97)
+==5695== 
+==5695== 512 bytes in 1 blocks are still reachable in loss record 27 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1297B9: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x129216: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask> > >::allocate(std::allocator<std::shared_ptr<PipelineTask> >&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x1287FD: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_node() (stl_deque.h:562)
+==5695==    by 0x1289F0: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_create_nodes(std::shared_ptr<PipelineTask>**, std::shared_ptr<PipelineTask>**) (stl_deque.h:663)
+==5695==    by 0x127DAF: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:637)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125BD6: PLLongestDistance::PLLongestDistance() (pipeline.hpp:105)
+==5695== 
+==5695== 512 bytes in 1 blocks are still reachable in loss record 28 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1297B9: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x129216: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask> > >::allocate(std::allocator<std::shared_ptr<PipelineTask> >&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x1287FD: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_node() (stl_deque.h:562)
+==5695==    by 0x1289F0: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_create_nodes(std::shared_ptr<PipelineTask>**, std::shared_ptr<PipelineTask>**) (stl_deque.h:663)
+==5695==    by 0x127DAF: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:637)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125C08: PLAverageDistance::PLAverageDistance() (pipeline.hpp:114)
+==5695== 
+==5695== 512 bytes in 1 blocks are still reachable in loss record 29 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x1297B9: __gnu_cxx::new_allocator<std::shared_ptr<PipelineTask> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x129216: std::allocator_traits<std::allocator<std::shared_ptr<PipelineTask> > >::allocate(std::allocator<std::shared_ptr<PipelineTask> >&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x1287FD: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_allocate_node() (stl_deque.h:562)
+==5695==    by 0x1289F0: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_create_nodes(std::shared_ptr<PipelineTask>**, std::shared_ptr<PipelineTask>**) (stl_deque.h:663)
+==5695==    by 0x127DAF: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:637)
+==5695==    by 0x12705B: std::_Deque_base<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x1263AB: std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12641E: std::queue<std::shared_ptr<PipelineTask>, std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > > >::queue<std::deque<std::shared_ptr<PipelineTask>, std::allocator<std::shared_ptr<PipelineTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x125A8F: TaskQueue::TaskQueue() (pipeline.hpp:48)
+==5695==    by 0x12497F: ActiveObject::ActiveObject(ActiveObject*) (pipeline.cpp:57)
+==5695==    by 0x125C3A: PLShortestDistance::PLShortestDistance() (pipeline.hpp:123)
+==5695== 
+==5695== 512 bytes in 1 blocks are still reachable in loss record 30 of 36
+==5695==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x130D51: __gnu_cxx::new_allocator<std::shared_ptr<LFTPTask> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==5695==    by 0x12FEB6: std::allocator_traits<std::allocator<std::shared_ptr<LFTPTask> > >::allocate(std::allocator<std::shared_ptr<LFTPTask> >&, unsigned long) (alloc_traits.h:464)
+==5695==    by 0x12F1FB: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_M_allocate_node() (stl_deque.h:562)
+==5695==    by 0x12EDA2: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_M_create_nodes(std::shared_ptr<LFTPTask>**, std::shared_ptr<LFTPTask>**) (stl_deque.h:663)
+==5695==    by 0x12E037: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_M_initialize_map(unsigned long) (stl_deque.h:637)
+==5695==    by 0x12D19D: std::_Deque_base<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::_Deque_base() (stl_deque.h:439)
+==5695==    by 0x12C6AD: std::deque<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >::deque() (stl_deque.h:834)
+==5695==    by 0x12C720: std::queue<std::shared_ptr<LFTPTask>, std::deque<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > > >::queue<std::deque<std::shared_ptr<LFTPTask>, std::allocator<std::shared_ptr<LFTPTask> > >, void>() (stl_queue.h:167)
+==5695==    by 0x12AEEB: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:44)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695== 
+==5695== 864 bytes in 3 blocks are possibly lost in loss record 31 of 36
+==5695==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==5695==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==5695==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==5695==    by 0x4B4C7B4: allocate_stack (allocatestack.c:430)
+==5695==    by 0x4B4C7B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==5695==    by 0x4947328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695==    by 0x121521: std::thread::thread<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}, , void>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (std_thread.h:143)
+==5695==    by 0x121472: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (new_allocator.h:162)
+==5695==    by 0x1211D9: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(std::allocator<std::thread>&, std::thread*, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (alloc_traits.h:516)
+==5695==    by 0x1212AF: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:449)
+==5695==    by 0x121143: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}>(TcpClientThreadPool::TcpClientThreadPool(unsigned long)::{lambda()#1}&&) (vector.tcc:121)
+==5695==    by 0x120AB3: TcpClientThreadPool::TcpClientThreadPool(unsigned long) (tcp_client_thread_pool.cpp:13)
+==5695==    by 0x11BFB8: poll_clients(char const*) (pollserver.cpp:153)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 864 bytes in 3 blocks are possibly lost in loss record 32 of 36
+==5695==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==5695==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==5695==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==5695==    by 0x4B4C7B4: allocate_stack (allocatestack.c:430)
+==5695==    by 0x4B4C7B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==5695==    by 0x4947328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695==    by 0x12EFE1: std::thread::thread<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&, void>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (std_thread.h:143)
+==5695==    by 0x12E3CC: void __gnu_cxx::new_allocator<std::thread>::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (new_allocator.h:162)
+==5695==    by 0x12D3AE: void std::allocator_traits<std::allocator<std::thread> >::construct<std::thread, void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(std::allocator<std::thread>&, std::thread*, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (alloc_traits.h:516)
+==5695==    by 0x12D4B7: void std::vector<std::thread, std::allocator<std::thread> >::_M_realloc_insert<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(__gnu_cxx::__normal_iterator<std::thread*, std::vector<std::thread, std::allocator<std::thread> > >, void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:449)
+==5695==    by 0x12C89B: std::thread& std::vector<std::thread, std::allocator<std::thread> >::emplace_back<void (LeaderFollowerThreadPool::*)(int), LeaderFollowerThreadPool*, unsigned long&>(void (LeaderFollowerThreadPool::*&&)(int), LeaderFollowerThreadPool*&&, unsigned long&) (vector.tcc:121)
+==5695==    by 0x12AF63: LeaderFollowerThreadPool::LeaderFollowerThreadPool(unsigned long) (LeaderFollowerThreadPool.cpp:49)
+==5695==    by 0x12AE40: LeaderFollowerThreadPool::getInstance(unsigned long) (LeaderFollowerThreadPool.cpp:40)
+==5695==    by 0x12B480: executeLeaderFollowerThreadPool(MSTree, int) (LeaderFollowerThreadPool.cpp:181)
+==5695== 
+==5695== 1,024 bytes in 1 blocks are still reachable in loss record 33 of 36
+==5695==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x4B35BA3: _IO_file_doallocate (filedoalloc.c:101)
+==5695==    by 0x4B44CDF: _IO_doallocbuf (genops.c:347)
+==5695==    by 0x4B43F5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==5695==    by 0x4B426D4: _IO_new_file_xsputn (fileops.c:1243)
+==5695==    by 0x4B426D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==5695==    by 0x4B2C14C: outstring_func (vfprintf-internal.c:239)
+==5695==    by 0x4B2C14C: __vfprintf_internal (vfprintf-internal.c:1263)
+==5695==    by 0x4B1779E: printf (printf.c:33)
+==5695==    by 0x11BB7D: add_to_pfds(pollfd**, int, int*, int*) (pollserver.cpp:44)
+==5695==    by 0x11C0C7: poll_clients(char const*) (pollserver.cpp:184)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 1,152 bytes in 4 blocks are possibly lost in loss record 34 of 36
+==5695==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==5695==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==5695==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==5695==    by 0x4B4C7B4: allocate_stack (allocatestack.c:430)
+==5695==    by 0x4B4C7B4: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==5695==    by 0x4947328: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695==    by 0x126555: std::thread::thread<void (ActiveObject::*)(), ActiveObject*, void>(void (ActiveObject::*&&)(), ActiveObject*&&) (std_thread.h:143)
+==5695==    by 0x124A80: ActiveObject::start() (pipeline.cpp:66)
+==5695==    by 0x125539: Pipeline::start() (pipeline.cpp:157)
+==5695==    by 0x1257CA: Pipeline::getPipeline() (pipeline.cpp:186)
+==5695==    by 0x11DA4F: execute(int, char*, Graph*) (execute_commands.cpp:118)
+==5695==    by 0x11DF98: executeCommand(int, char*, void**) (execute_commands.cpp:164)
+==5695==    by 0x11E2A9: executeCommandToFd(int, char*, void**) (execute_commands.cpp:247)
+==5695==    by 0x121008: TcpClientThreadPool::worker() (tcp_client_thread_pool.cpp:91)
+==5695== 
+==5695== 1,560 bytes in 1 blocks are still reachable in loss record 35 of 36
+==5695==    at 0x48487A9: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x4BFAD76: make_request (check_pf.c:235)
+==5695==    by 0x4BFAD76: __check_pf (check_pf.c:329)
+==5695==    by 0x4BC2BE0: getaddrinfo (getaddrinfo.c:2446)
+==5695==    by 0x11D386: createListner(char const*) (listner.cpp:24)
+==5695==    by 0x11BECA: poll_clients(char const*) (pollserver.cpp:136)
+==5695==    by 0x11B9FC: main (main.cpp:13)
+==5695== 
+==5695== 72,704 bytes in 1 blocks are still reachable in loss record 36 of 36
+==5695==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5695==    by 0x4915939: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==5695==    by 0x400647D: call_init.part.0 (dl-init.c:70)
+==5695==    by 0x4006567: call_init (dl-init.c:33)
+==5695==    by 0x4006567: _dl_init (dl-init.c:117)
+==5695==    by 0x40202C9: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+==5695== 
+==5695== LEAK SUMMARY:
+==5695==    definitely lost: 0 bytes in 0 blocks
+==5695==    indirectly lost: 0 bytes in 0 blocks
+==5695==      possibly lost: 3,456 bytes in 12 blocks
+==5695==    still reachable: 80,176 bytes in 38 blocks
+==5695==         suppressed: 0 bytes in 0 blocks
+==5695== 
+==5695== For lists of detected and suppressed errors, rerun with: -s
+==5695== ERROR SUMMARY: 5 errors from 5 contexts (suppressed: 0 from 0)

@@ -3,14 +3,14 @@
 #include <unistd.h>
 #include <sstream>
 #include "LeaderFollowerThreadPool.hpp"
-
+using namespace std;
 // TaskGroup class implementation
 TaskGroup::TaskGroup(size_t taskCount)
-    : counter(std::make_shared<std::atomic<int>>(taskCount)) {}
+    : counter(make_shared<atomic<int>>(taskCount)) {}
 
 void TaskGroup::waitForTaskGroup()
 {
-    std::unique_lock<std::mutex> lock(mtx);
+    unique_lock<mutex> lock(mtx);
     cv.wait(lock, [this]
             { return *counter == 0; });
 }
@@ -19,13 +19,13 @@ void TaskGroup::taskCompleted()
 {
     if (--(*counter) == 0)
     {
-        std::lock_guard<std::mutex> lock(mtx);
+        lock_guard<mutex> lock(mtx);
         cv.notify_one();
     }
 }
 
 // LFTPTask class implementation
-LFTPTask::LFTPTask(MSTree data, int fd, std::shared_ptr<TaskGroup> taskGroup)
+LFTPTask::LFTPTask(MSTree data, int fd, shared_ptr<TaskGroup> taskGroup)
     : taskGroup(taskGroup), data_(data), fd_(fd) {}
 
 void LFTPTask::process()
@@ -53,7 +53,7 @@ LeaderFollowerThreadPool::LeaderFollowerThreadPool(size_t numThreads)
 LeaderFollowerThreadPool::~LeaderFollowerThreadPool()
 {
     {
-        std::unique_lock<std::mutex> lock(mtx);
+        unique_lock<mutex> lock(mtx);
         stopPool = true;
     }
     condVar.notify_all();
@@ -66,10 +66,10 @@ LeaderFollowerThreadPool::~LeaderFollowerThreadPool()
     }
 }
 
-void LeaderFollowerThreadPool::addTaskGroup(const std::vector<std::shared_ptr<LFTPTask>> &tasks)
+void LeaderFollowerThreadPool::addTaskGroup(const vector<shared_ptr<LFTPTask>> &tasks)
 {
 
-    std::unique_lock<std::mutex> lock(mtx);
+    unique_lock<mutex> lock(mtx);
     for (const auto &task : tasks)
     {
         taskQueue.push(task);
@@ -79,10 +79,10 @@ void LeaderFollowerThreadPool::addTaskGroup(const std::vector<std::shared_ptr<LF
 
 void LeaderFollowerThreadPool::workerThread(int threadId) {
     while (true) {
-        std::shared_ptr<LFTPTask> task;
+        shared_ptr<LFTPTask> task;
 
         {
-            std::unique_lock<std::mutex> lock(mtx);
+            unique_lock<mutex> lock(mtx);
 
             // Only the first thread to enter when currentLeader == -1 will set itself as the leader
             while (currentLeader != threadId && !stopPool) {
@@ -127,12 +127,12 @@ void LeaderFollowerThreadPool::workerThread(int threadId) {
 class LFTPTotalWeight : public LFTPTask
 {
 public:
-    LFTPTotalWeight(MSTree data, int fd, std::shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
+    LFTPTotalWeight(MSTree data, int fd, shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
     void execute()
     {
-        std::ostringstream oss;
-        oss << "TotalWeight: " << data_.getTotalWeight() << std::endl;
-        std::string output = oss.str();
+        ostringstream oss;
+        oss << "TotalWeight: " << data_.getTotalWeight() << endl;
+        string output = oss.str();
         write(fd_, output.c_str(), output.size());
     }
 };
@@ -140,12 +140,12 @@ public:
 class LFTPLongestDistance : public LFTPTask
 {
 public:
-    LFTPLongestDistance(MSTree data, int fd, std::shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
+    LFTPLongestDistance(MSTree data, int fd, shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
     void execute()
     {
-        std::ostringstream oss;
-        oss << "LongestDistance: " << data_.findLongestDistance() << std::endl;
-        std::string output = oss.str();
+        ostringstream oss;
+        oss << "LongestDistance: " << data_.findLongestDistance() << endl;
+        string output = oss.str();
         write(fd_, output.c_str(), output.size());
     }
 };
@@ -153,12 +153,12 @@ public:
 class LFTPAverageDistance : public LFTPTask
 {
 public:
-    LFTPAverageDistance(MSTree data, int fd, std::shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
+    LFTPAverageDistance(MSTree data, int fd, shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
     void execute()
     {
-        std::ostringstream oss;
-        oss << "AverageDistance: " << data_.findAverageDistance() << std::endl;
-        std::string output = oss.str();
+        ostringstream oss;
+        oss << "AverageDistance: " << data_.findAverageDistance() << endl;
+        string output = oss.str();
         write(fd_, output.c_str(), output.size());
     }
 };
@@ -166,31 +166,27 @@ public:
 class LFTPShortestDistance : public LFTPTask
 {
 public:
-    LFTPShortestDistance(MSTree data, int fd, std::shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
+    LFTPShortestDistance(MSTree data, int fd, shared_ptr<TaskGroup> taskGroup) : LFTPTask(data, fd, taskGroup) {}
     void execute()
     {
-        std::ostringstream oss;
-        oss << "ShortestDistance: " << data_.findShortestDistance() << std::endl;
-        std::string output = oss.str();
+        ostringstream oss;
+        oss << "ShortestDistance: " << data_.findShortestDistance() << endl;
+        string output = oss.str();
         write(fd_, output.c_str(), output.size());
     }
 };
 
 void executeLeaderFollowerThreadPool(MSTree data, int fd)
 {
-
     LeaderFollowerThreadPool &pool = LeaderFollowerThreadPool::getInstance(4);
-    std::vector<std::shared_ptr<LFTPTask>> tasks;
-
-    auto taskGroup = std::make_shared<TaskGroup>(4);
-
-    tasks.push_back(std::make_shared<LFTPTotalWeight>(data, fd, taskGroup));
-    tasks.push_back(std::make_shared<LFTPLongestDistance>(data, fd, taskGroup));
-    tasks.push_back(std::make_shared<LFTPAverageDistance>(data, fd, taskGroup));
-    tasks.push_back(std::make_shared<LFTPShortestDistance>(data, fd, taskGroup));
+    vector<shared_ptr<LFTPTask>> tasks;
+    auto taskGroup = make_shared<TaskGroup>(4);
+    tasks.push_back(make_shared<LFTPTotalWeight>(data, fd, taskGroup));
+    tasks.push_back(make_shared<LFTPLongestDistance>(data, fd, taskGroup));
+    tasks.push_back(make_shared<LFTPAverageDistance>(data, fd, taskGroup));
+    tasks.push_back(make_shared<LFTPShortestDistance>(data, fd, taskGroup));
     // Add the task group to the pool
     pool.addTaskGroup(tasks);
-
     // Wait for all tasks in the group to complete
     taskGroup->waitForTaskGroup();
 }

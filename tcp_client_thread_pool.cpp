@@ -29,17 +29,17 @@ TcpClientThreadPool::~TcpClientThreadPool()
     }
 }
 
-// Enqueue a task into the thread pool
+// Enqueue a new client task into the thread pool
 void TcpClientThreadPool::enqueue(std::shared_ptr<Context> ctx)
 {
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        tasks.push(ctx);
+        std::unique_lock<std::mutex> lock(queueMutex); // Lock for thread-safe queue access
+        tasks.push(ctx);                               // Add task to the queue
     }
-    condition.notify_one();
+    condition.notify_one(); // Notify one waiting thread to process the new task
 }
 
-// Worker thread function
+// Worker thread function - processes tasks from the queue
 void TcpClientThreadPool::worker()
 {
     while (true)
@@ -87,11 +87,9 @@ void TcpClientThreadPool::worker()
             }
             buf[nbytes] = '\0';
             printf("buf: %s\n", buf);
+            // Execute command received from client and update context
             executeCommandToFd(ctx->fd, buf, &ctx->context);
-            write(ctx->pipe_write_fd, ctx.get(), sizeof(Context));
-            // write to pipe with context returned from executeCommandToFd
+            write(ctx->pipe_write_fd, ctx.get(), sizeof(Context)); // write to pipe with context returned from executeCommandToFd
         }
-
-        // ctx->doMyTask();
     }
 }

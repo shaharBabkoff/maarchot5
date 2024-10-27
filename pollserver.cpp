@@ -17,18 +17,17 @@
 #include "listner.hpp"
 #include "execute_commands.hpp"
 #include "tcp_client_thread_pool.hpp"
-// Get sockaddr, IPv4 or IPv6:
+// Retrieve IP address from sockaddr, for either IPv4 or IPv6
 void *get_in_addr(struct sockaddr *sa)
 {
     if (sa->sa_family == AF_INET)
     {
         return &(((struct sockaddr_in *)sa)->sin_addr);
     }
-
     return &(((struct sockaddr_in6 *)sa)->sin6_addr);
 }
 
-// Add a new file descriptor to the set
+// Add a new file descriptor to the pollfd array
 void add_to_pfds(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
 {
     // If we don't have room, add more space in the pfds array
@@ -38,15 +37,13 @@ void add_to_pfds(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
 
         *pfds = (struct pollfd *)realloc(*pfds, sizeof(**pfds) * (*fd_size));
     }
-
     (*pfds)[*fd_count].fd = newfd;
     (*pfds)[*fd_count].events = POLLIN; // Check ready-to-read
     (*pfds)[*fd_count].revents = 0;
-
     (*fd_count)++;
     printf("add_to_pfds:  %d\n", newfd);
 }
-
+// Add a context to the context list, managing size and duplicates
 void add_to_contexts(struct Context *ctxs[], struct Context *ctx, int *context_count, int *context_size)
 {
     bool inList = false;
@@ -69,13 +66,11 @@ void add_to_contexts(struct Context *ctxs[], struct Context *ctx, int *context_c
 
             *ctxs = (struct Context *)realloc(*ctxs, sizeof(**ctxs) * (*context_size));
         }
-
         (*ctxs)[*context_count] = *ctx;
-
         (*context_count)++;
     }
 }
-
+// Retrieve context for a specific file descriptor
 void *get_context(Context ctxs[], int fd, int *context_count)
 {
     void *context = NULL;
@@ -90,13 +85,12 @@ void *get_context(Context ctxs[], int fd, int *context_count)
     return context;
 }
 
-// Remove an index from the set
+// Remove a file descriptor from the pollfd array
 void del_from_pfds(struct pollfd pfds[], int i, int *fd_count)
 {
     printf("going to remove %d\n", pfds[i].fd);
     // Copy the one from the end over this one
     pfds[i] = pfds[*fd_count - 1];
-
     (*fd_count)--;
 }
 // del_from_contexts(contexts, pfds[i].fd, &context_count);
@@ -113,78 +107,61 @@ void del_from_contexts(Context ctxs[], int fd, int *context_count)
             break;
         }
     }
-
     if (inList)
     {
         ctxs[i] = ctxs[*context_count - 1];
         (*context_count)--;
     }
 }
-
+// Main function to handle polling of clients and managing events
 void poll_clients(const char *port)
 {
-    int listener; // Listening socket descriptor
-    int pipefds[2];
-    int newfd;                          // Newly accept()ed socket descriptor
-    struct sockaddr_storage remoteaddr; // Client address
+    int listener;                       // Listening socket for new connections
+    int pipefds[2];                     // Pipe for communication between threads
+    int newfd;                          // Socket descriptor for new clients
+    struct sockaddr_storage remoteaddr; // Storage for client address
     socklen_t addrlen;
-
-    // char buf[256]; // Buffer for client data
-
     char remoteIP[INET6_ADDRSTRLEN];
-
-    // Start off with room for 5 connections
-    // (We'll realloc as necessary)
-
+    // Start with space for a limited number of connections
     if (pipe(pipefds) == -1)
     {
         fprintf(stderr, "error creating pipe\n");
         exit(EXIT_FAILURE);
     }
-
     int fd_count = 0;
     int fd_size = 7;
     int context_count = 0;
     int context_size = 5;
-
     // Set up and get a listening socket
     listener = createListner(port);
-
     if (listener == -1)
     {
         fprintf(stderr, "error getting listening socket\n");
         exit(EXIT_FAILURE);
     }
-
     struct pollfd *pfds = (struct pollfd *)malloc(sizeof *pfds * fd_size);
     struct Context *contexts = (struct Context *)malloc(sizeof *contexts * context_size);
-
-    // Add the listener to set
+    // Add the listener socket to the poll list
     pfds[0].fd = listener;
     pfds[0].events = POLLIN; // Report ready to read on incoming connection
     pfds[0].revents = 0;
     pfds[1].fd = pipefds[0];
     pfds[1].events = POLLIN; // Report client action completed
     pfds[1].revents = 0;
-
     fd_count = 2; // For the listener and pipe
-
-    // Main loop
+    // Main poll loop
     TcpClientThreadPool tcpClientThreadPool(4);
     for (;;)
     {
-        int poll_count = poll(pfds, fd_count, -1);
-
+        int poll_count = poll(pfds, fd_count, 500); // Wait for an event
         if (poll_count == -1)
         {
             perror("poll");
             exit(1);
         }
-
         // Run through the existing connections looking for data to read
         for (int i = 0; i < fd_count; i++)
         {
-
             // Check if someone's ready to read
             if (pfds[i].revents & POLLIN)
             { // We got one!!
@@ -215,7 +192,7 @@ void poll_clients(const char *port)
                         printCommandsToFd(newfd);
                     }
                 }
-                else if (pfds[i].fd == pipefds[0])
+                else if (pfds[i].fd == pipefds[0]) // Handle pipe signals from worker threads
                 {
                     printf("completed client operation.going to read from pipe\n");
                     // read context from pipe, reinsert fd to array
@@ -231,44 +208,11 @@ void poll_clients(const char *port)
                         add_to_pfds(&pfds, ctx.fd, &fd_count, &fd_size);
                     }
                 }
-                else
+                else // Handle data from an existing client
                 {
-
-                    // If not the listener, we're just a regular client
-                    // find context if exists:
                     printf("ready to read from %d, going to post to thread pool!!!\n", pfds[i].fd);
                     tcpClientThreadPool.enqueue(std::make_shared<Context>(pfds[i].fd, pipefds[1], get_context(contexts, pfds[i].fd, &context_count)));
                     del_from_pfds(pfds, i, &fd_count);
-                    // int nbytes = recv(pfds[i].fd, buf, sizeof(buf) - 1, 0);
-                    // printf("returned from recv!!!\n");
-                    // int sender_fd = pfds[i].fd;
-
-                    // if (nbytes <= 0)
-                    // {
-                    //     // Got error or connection closed by client
-                    //     if (nbytes == 0)
-                    //     {
-                    //         // Connection closed
-                    //         printf("pollserver: socket %d hung up\n", sender_fd);
-                    //     }
-                    //     else
-                    //     {
-                    //         perror("recv");
-                    //     }
-                    //     del_from_contexts(contexts, pfds[i].fd, &context_count);
-                    //     close(pfds[i].fd); // Bye!
-
-                    //     del_from_pfds(pfds, i, &fd_count);
-                    // }
-                    // else
-                    // {
-                    //     while (nbytes > 0 && isspace((unsigned char)buf[nbytes - 1]))
-                    //     {
-                    //         --nbytes;
-                    //     }
-                    //     buf[nbytes] = '\0';
-                    //     executeCommandToFd(sender_fd, buf);
-                    // }
                 }
             }
         }

@@ -38,6 +38,7 @@
 #define NEWLINE "\n"
 
 #define LINE_SEPERATOR "*****************************************************\n"
+using namespace std;
 void printCommands(int fd)
 {
     write(fd, COMMANDS_USAGE, sizeof(COMMANDS_USAGE));
@@ -93,7 +94,7 @@ Graph *getNewGraph(int fd, int vertices, int edges)
 void execute(int fd, char *token, Graph *graph)
 {
     MSTFactory factory;
-    std::unique_ptr<MSTStrategy> strategy;
+    unique_ptr<MSTStrategy> strategy;
     MSTree mst;
     if (strcmp(token, "Prim") == 0)
     {
@@ -105,25 +106,23 @@ void execute(int fd, char *token, Graph *graph)
     }
     else
     {
-        // write error
         return;
     }
     mst = strategy->computeMST(*graph);
     mst.printMST(fd);
     write(fd, LINE_SEPERATOR, sizeof(LINE_SEPERATOR));
-    std::ostringstream oss;
-    oss << "Running pipeline for " << token << std::endl;
-    std::string output = oss.str();
+    ostringstream oss;
+    oss << "Running pipeline for " << token << endl;
+    string output = oss.str();
     write(fd, output.c_str(), output.size());
-
     Pipeline &pipeline = Pipeline::getPipeline();
-    auto task = std::make_shared<PipelineTask>(mst, fd);
+    auto task = make_shared<PipelineTask>(mst, fd);
     pipeline.execute(task);
     task->waitForCompletion();
     write(fd, LINE_SEPERATOR, sizeof(LINE_SEPERATOR));
     oss.str("");
     oss.clear();
-    oss << "Running Leader/Follower thread pool for " << token << std::endl;
+    oss << "Running Leader/Follower thread pool for " << token << endl;
     output = oss.str();
     write(fd, output.c_str(), output.size());
     executeLeaderFollowerThreadPool(mst, fd);

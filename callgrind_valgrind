@@ -1,0 +1,47 @@
+shaharbabkoff@Ubunto:~/maarchot/maarchot5-main$ valgrind --tool=callgrind bin/mst_project
+==6414== Callgrind, a call-graph generating cache profiler
+==6414== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==6414== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==6414== Command: bin/mst_project
+==6414== 
+==6414== For interactive control, run 'callgrind_control -h'.
+add_to_pfds:  6
+pollserver: new connection from 127.0.0.1 on socket 6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Newgraph 2,1
+completed client operation.going to read from pipe
+add_to_pfds:  6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Prim
+Prim....
+completed client operation.going to read from pipe
+add_to_pfds:  6
+ready to read from 6, going to post to thread pool!!!
+going to remove 6
+in worker 6
+going to call recv!!!
+returned from recv!!!
+buf: Kruskal
+Kruskal....
+completed client operation.going to read from pipe
+add_to_pfds:  6
+^C==6414== 
+==6414== Process terminating with default action of signal 2 (SIGINT)
+==6414==    at 0x4BB7BCF: poll (poll.c:29)
+==6414==    by 0x11BFD8: poll_clients(char const*) (pollserver.cpp:156)
+==6414==    by 0x11B9FC: main (main.cpp:13)
+==6414== 
+==6414== Events    : Ir
+==6414== Collected : 2959175
+==6414== 
+==6414== I   refs:      2,959,175
+
+shaharbabkoff@Ubunto:~/maarchot/maarchot5-main$ 

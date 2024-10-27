@@ -23,23 +23,21 @@ void MSTree::printMST(int fd)
 {
     if (fd == -1)
     {
-        std::cout << "MST Edges:\n";
+        cout << "MST Edges:\n";
         for (const auto &edge : mstEdges_)
         {
-            std::cout << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << std::endl;
+            cout << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << endl;
         }
-      //  std::cout << "Total MST Weight: " << totalWeight_ << std::endl;
     }
     else
     {
-        std::ostringstream oss;
+        ostringstream oss;
         oss << "MST Edges:\n";
         for (const auto &edge : mstEdges_)
         {
-            oss << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << std::endl;
+            oss << "Edge (" << edge.v1_ << ", " << edge.v2_ << ") -> Weight: " << edge.weight_ << endl;
         }
-        //oss << "Total MST Weight: " << totalWeight_ << std::endl;
-        std::string output = oss.str();
+        string output = oss.str();
         write(fd, output.c_str(), output.size());
     }
 }
@@ -91,14 +89,13 @@ double MSTree::findShortestDistance()
         }
     }
     return shortestDistance;
-    //std::cout << "Shortest Distance: " << shortestDistance << std::endl;
 }
 
 // Helper function to perform DFS and return the farthest node and its distance
-std::pair<int, double> MSTree::dfs(int node, int parent, std::vector<bool> &visited)
+pair<int, double> MSTree::dfs(int node, int parent, vector<bool> &visited)
 {
     visited[node] = true;
-    std::pair<int, double> farthest = {node, 0}; // {farthest node, distance}
+    pair<int, double> farthest = {node, 0}; // {farthest node, distance}
 
     for (const auto &neighbor : adjList[node])
     {
@@ -134,7 +131,7 @@ double MSTree::findLongestDistance()
     // The second DFS gives the longest distance
     ans = farthest.second;
 
-    //std::cout << "Longest Distance: " << ans << std::endl;
+    //cout << "Longest Distance: " << ans << endl;
     return ans;
 }
 
@@ -168,5 +165,4 @@ double MSTree::findAverageDistance()
         ans = 0; // Handle the case where no valid distances were found
     }
     return ans;
-    // std::cout << "Average Distance: " << ans << std::endl;
 }
