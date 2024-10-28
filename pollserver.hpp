@@ -13,6 +13,6 @@ struct Context
     }
 };
 // Main function to start the poll server and handle clients on the specified port
-void poll_clients(const char *port);
+void poll_clients(const char *port, std::atomic<bool>& exit_flag);
 
 #endif // __POLLSERVER_H__
