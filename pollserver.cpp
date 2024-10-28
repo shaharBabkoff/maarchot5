@@ -115,7 +115,7 @@ void del_from_contexts(Context ctxs[], int fd, int *context_count)
     }
 }
 // Main function to handle polling of clients and managing events
-void poll_clients(const char *port, std::atomic<bool>& exit_flag)
+void poll_clients(const char *port, std::atomic<bool> &exit_flag)
 {
     int listener;
     int pipefds[2];
@@ -220,6 +220,11 @@ void poll_clients(const char *port, std::atomic<bool>& exit_flag)
     }
 
     // Clean up on exit
+    for (int i = 2; i < fd_count; i++)
+    {
+        tcpClientThreadPool.enqueue(std::make_shared<Context>(-1, -1, get_context(contexts, pfds[i].fd, &context_count)));
+        close(pfds[i].fd);
+    }
     close(listener);
     close(pipefds[0]);
     close(pipefds[1]);

@@ -1,7 +1,6 @@
 #ifndef __POLLSERVER_H__
 #define __POLLSERVER_H__
 
-#define INVALID_POINTER reinterpret_cast<void*>(-1)
 // Context struct representing client specific dada
 struct Context
 {

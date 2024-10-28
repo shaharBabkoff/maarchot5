@@ -2,6 +2,9 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17 -g -O0
 
+# Coverage flags
+CXXFLAGS_COVERAGE = -fprofile-arcs -ftest-coverage
+
 # Directories
 BIN_DIR = bin
 
@@ -32,6 +35,10 @@ $(TARGET): $(OBJS)
 $(BIN_DIR)/%.o: %.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Build with code coverage
+code-coverage: CXXFLAGS += $(CXXFLAGS_COVERAGE)
+code-coverage: clean $(TARGET)
+
 # Clean up the build files
 clean:
-	rm -f $(BIN_DIR)/*.o $(TARGET)
+	rm -f $(BIN_DIR)/*.o $(TARGET) $(BIN_DIR)/*.gcda $(BIN_DIR)/*.gcno *.gcov

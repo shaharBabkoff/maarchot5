@@ -57,39 +57,49 @@ void TcpClientThreadPool::worker()
             tasks.pop();
         }
         printf("in worker %d\n", ctx->fd);
-        char buf[256]; // Buffer for client data
-        printf("going to call recv!!!\n");
-        int nbytes = recv(ctx->fd, buf, sizeof(buf) - 1, 0);
-        printf("returned from recv!!!\n");
-
-        if (nbytes <= 0)
+        if (ctx->fd == -1)
         {
-            // Got error or connection closed by client
-            if (nbytes == 0)
-            {
-                // Connection closed
-                printf("worker: socket %d hung up\n", ctx->fd);
-            }
-            else
-            {
-                perror("recv");
-            }
-            close(ctx->fd); // Bye!
+            printf("got fd==-1, releasing context memory\n");
+            freeContext(ctx->context);
             ctx->context = INVALID_POINTER;
-            write(ctx->pipe_write_fd, ctx.get(), sizeof(Context));
-            // write to the pipe with context==-1
         }
         else
         {
-            while (nbytes > 0 && isspace((unsigned char)buf[nbytes - 1]))
+            char buf[256]; // Buffer for client data
+            printf("going to call recv!!!\n");
+            int nbytes = recv(ctx->fd, buf, sizeof(buf) - 1, 0);
+            printf("returned from recv!!!\n");
+
+            if (nbytes <= 0)
             {
-                --nbytes;
+                // Got error or connection closed by client
+                if (nbytes == 0)
+                {
+                    // Connection closed
+                    printf("worker: socket %d hung up\n", ctx->fd);
+                }
+                else
+                {
+                    perror("recv");
+                }
+                close(ctx->fd); // Bye!
+                freeContext(ctx->context);
+                ctx->context = INVALID_POINTER;
+                write(ctx->pipe_write_fd, ctx.get(), sizeof(Context));
+                // write to the pipe with context==-1
             }
-            buf[nbytes] = '\0';
-            printf("buf: %s\n", buf);
-            // Execute command received from client and update context
-            executeCommandToFd(ctx->fd, buf, &ctx->context);
-            write(ctx->pipe_write_fd, ctx.get(), sizeof(Context)); // write to pipe with context returned from executeCommandToFd
+            else
+            {
+                while (nbytes > 0 && isspace((unsigned char)buf[nbytes - 1]))
+                {
+                    --nbytes;
+                }
+                buf[nbytes] = '\0';
+                printf("buf: %s\n", buf);
+                // Execute command received from client and update context
+                executeCommandToFd(ctx->fd, buf, &ctx->context);
+                write(ctx->pipe_write_fd, ctx.get(), sizeof(Context)); // write to pipe with context returned from executeCommandToFd
+            }
         }
     }
 }

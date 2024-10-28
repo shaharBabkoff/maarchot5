@@ -127,9 +127,17 @@ void execute(int fd, char *token, Graph *graph)
     write(fd, output.c_str(), output.size());
     executeLeaderFollowerThreadPool(mst, fd);
     write(fd, LINE_SEPERATOR, sizeof(LINE_SEPERATOR));
-
 }
 
+void freeContext(void *context)
+{
+    if (context != NULL && context != INVALID_POINTER)
+    {
+        printf("freeContext: deleting graph\n");
+        Graph *graph = (Graph *)(context);
+        delete graph;
+    }
+}
 void executeCommand(int fd, char *input, void **context)
 {
     char *param1 = NULL, *param2 = NULL, *param3 = NULL, *saveptr;
@@ -234,8 +242,6 @@ void executeCommand(int fd, char *input, void **context)
     }
     write(fd, ENTER_COMMAND, sizeof(ENTER_COMMAND));
 }
-
-
 
 void printCommandsToFd(int fd)
 {
